@@ -28,7 +28,7 @@ public class Menu extends JPanel {
         {"~MAIN~"},
         {"Dashboard"},
         {"~Inventory~"},
-        {"Add", "Inbox", "Read", "Compost"},
+        {"Inventory", "Good Receipt", "Good Issue", "Update"},
         {"Chat"},
         {"Calendar"},
         {"~COMPONENT~"},

@@ -12,6 +12,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import raven.application.form.LoginForm;
 import raven.application.form.MainForm;
+import raven.swing.icon.GoogleMaterialDesignIcons;
+import raven.swing.icon.IconFontSwing;
 import raven.toast.Notifications;
 
 /**
@@ -23,7 +25,8 @@ public class Application extends javax.swing.JFrame {
     private static Application app;
     private final MainForm mainForm;
     private final LoginForm loginForm;
-
+    
+    
     public Application() {
         initComponents();
         setSize(new Dimension(1366, 768));
@@ -33,6 +36,9 @@ public class Application extends javax.swing.JFrame {
         setContentPane(loginForm);
         getRootPane().putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT, true);
         Notifications.getInstance().setJFrame(this);
+        
+        // Init Google icon font
+        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
     }
 
     public static void showForm(Component component) {
@@ -82,6 +88,8 @@ public class Application extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
+    
     public static void main(String args[]) {
         FlatRobotoFont.install();
         FlatLaf.registerCustomDefaultsSource("raven.theme");

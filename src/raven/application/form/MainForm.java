@@ -17,8 +17,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import raven.application.Application;
 import raven.application.form.other.FormDashboard;
-import raven.application.form.other.FormInbox;
-import raven.application.form.other.FormRead;
+import raven.application.form.other.FormGoodReceipt;
+import raven.application.form.other.FormGoodIssue;
+import raven.application.form.other.FormUpdate;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -75,10 +76,14 @@ public class MainForm extends JLayeredPane {
             } 
             else if (index == 1) {
                 if (subIndex == 1) {
-                    Application.showForm(new FormInbox());
+                    Application.showForm(new FormGoodReceipt());
                 } else if (subIndex == 2) {
-                    Application.showForm(new FormRead());
-                } else {
+                    Application.showForm(new FormGoodIssue());
+                } else if (subIndex == 3) {
+                    Application.showForm(new FormUpdate());
+                } 
+                
+                else {
                     action.cancel();
                 }
             } else if (index == 9) {
