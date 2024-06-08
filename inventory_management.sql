@@ -11,7 +11,7 @@ CREATE TABLE `Inventory` (
   `InventoryID` int NOT NULL AUTO_INCREMENT,
   `Type` varchar(50) DEFAULT NULL,
   `Name` varchar(100) NOT NULL,
-  `Quantity` int NOT NULL,
+  `Quantity` int unsigned NOT NULL,
   `Image` varchar(255) DEFAULT NULL,
   `Description` text,
   `PurchasingPrice` decimal(10,2) DEFAULT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `TransactionDetails` (
   `TransactionDetailID` int NOT NULL AUTO_INCREMENT,
   `TransactionID` int DEFAULT NULL,
   `InventoryID` int DEFAULT NULL,
-  `Quantity` int NOT NULL,
+  `Quantity` int unsigned NOT NULL,
   PRIMARY KEY (`TransactionDetailID`),
   KEY `TransactionID` (`TransactionID`),
   KEY `InventoryID` (`InventoryID`),
@@ -45,6 +45,7 @@ CREATE TABLE `Users` (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(50) NOT NULL,
+  `Role` enum('ADMIN','USER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Username` (`Username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -61,8 +62,8 @@ INSERT INTO `TransactionDetails` (`TransactionDetailID`, `TransactionID`, `Inven
 (5, 3, 2, 100);
 
 
-INSERT INTO `Users` (`UserID`, `Username`, `Password`) VALUES
-(1, 'admin', 'admin');
+INSERT INTO `Users` (`UserID`, `Username`, `Password`, `Role`) VALUES
+(1, 'admin', 'admin', 'USER');
 
 
 

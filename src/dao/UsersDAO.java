@@ -34,7 +34,6 @@ public class UsersDAO implements DAOInterface<Users>{
 	@Override
 	public void delete(int id) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
