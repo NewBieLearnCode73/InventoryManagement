@@ -9,7 +9,7 @@ import dao.UsersDAO;
 
 
 public class LoginModel {
-private String loginUsername;
+        private String loginUsername;
 	private String loginPassword;
 	
 	public LoginModel() {

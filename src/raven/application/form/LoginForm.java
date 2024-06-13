@@ -2,6 +2,9 @@ package raven.application.form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.LoginController;
+import java.awt.FlowLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import model.LoginModel;
 import net.miginfocom.swing.MigLayout;
 import raven.application.Application;
@@ -23,6 +26,11 @@ public class LoginForm extends javax.swing.JPanel {
         action = new LoginController(this); // Khởi tạo controller
         
         cmdLogin.addActionListener(action);
+        
+        ImageIcon icon = new ImageIcon("");
+        JFrame frame = new JFrame();
+        frame.setLayout(new FlowLayout());
+        frame.setSize(1200, 800);
         
     }
 
@@ -52,6 +60,7 @@ public class LoginForm extends javax.swing.JPanel {
         txtUser = new javax.swing.JTextField();
         lbPass = new javax.swing.JLabel();
         txtPass = new javax.swing.JPasswordField();
+        roleComboBox = new javax.swing.JComboBox<>();
         cmdLogin = new javax.swing.JButton();
 
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -66,7 +75,15 @@ public class LoginForm extends javax.swing.JPanel {
         panelLogin1.add(lbPass);
         panelLogin1.add(txtPass);
 
+        roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User"}));
+        panelLogin1.add(roleComboBox);
+
         cmdLogin.setText("Login");
+        cmdLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdLoginActionPerformed(evt);
+            }
+        });
         panelLogin1.add(cmdLogin);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -74,18 +91,22 @@ public class LoginForm extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(218, Short.MAX_VALUE)
+                .addContainerGap(325, Short.MAX_VALUE)
                 .addComponent(panelLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(197, 197, 197))
+                .addGap(323, 323, 323))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(panelLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addGap(88, 88, 88)
+                .addComponent(panelLogin1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(140, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmdLoginActionPerformed
 
     // Xác thực đăng nhập 
 	public boolean authenticateUser(String username, String password) {
@@ -100,6 +121,7 @@ public class LoginForm extends javax.swing.JPanel {
     private javax.swing.JLabel lbTitle;
     private javax.swing.JLabel lbUser;
     private raven.application.form.PanelLogin panelLogin1;
+    private javax.swing.JComboBox<String> roleComboBox;
     public javax.swing.JPasswordField txtPass;
     public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
