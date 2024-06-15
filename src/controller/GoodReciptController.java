@@ -130,7 +130,10 @@ public class GoodReciptController implements Action, MouseListener {
 
             // Lấy được id 
             InventoryDAO.getInstance().delete(Integer.parseInt(model.getValueAt(row, 0).toString()));
-            deleteImage(model.getValueAt(row, 7).toString());
+            if(model.getValueAt(row, 7) != null && !"".equals(model.getValueAt(row, 7).toString())){
+                    deleteImage(model.getValueAt(row, 7).toString());
+            }
+            
             this.view.SupperLoadingData();
         }
 
@@ -193,7 +196,8 @@ public class GoodReciptController implements Action, MouseListener {
                 this.view.inventoryImage.setIcon(getImage(model.getValueAt(row, 7).toString()));
             }
             else{
-                this.view.inventoryImageName.setText("");
+                this.view.inventoryImageName.setText("place_holder_image.png");
+                this.view.inventoryImage.setIcon(getImage(this.view.inventoryImageName.getText()));
             }
             
             this.view.btnInventoryAdd.setEnabled(false);

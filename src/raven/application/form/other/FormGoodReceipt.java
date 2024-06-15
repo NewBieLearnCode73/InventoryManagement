@@ -14,6 +14,7 @@ import model.Inventory;
 import model.InventoryType;
 import raven.toast.Notifications;
 import model.GoodReceiptModel;
+
 /**
  *
  * @author Raven
@@ -24,27 +25,25 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         initComponents();
         lb.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
-        
+
         inventoryImage.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
 
-        DefaultTableCellRenderer stringRenderer = (DefaultTableCellRenderer)
-        inventoryTable.getDefaultRenderer(String.class);
+        DefaultTableCellRenderer stringRenderer = (DefaultTableCellRenderer) inventoryTable.getDefaultRenderer(String.class);
         stringRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         // ẩn ô ID
         this.inventoryID.setVisible(true);
-        
+
         // ẩn ô tên ảnh
         this.inventoryImageName.setVisible(true);
-        
+
         String[] listType = InventoryType.getAllType();
         for (String string : listType) {
             inventoryComboBoxType.addItem(string);
         }
 
         inventoryComboBoxType.setSelectedIndex(-1);
-        
-        
+
         // Gắn sự kiện
         Action action = new GoodReciptController(this);
         btnImageBrowse.addActionListener(action);
@@ -53,11 +52,11 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         btnInventoryDelete.addActionListener(action);
         btnInventoryLoad.addActionListener(action);
         btnFormReset.addActionListener(action);
-       
+
         // Xử lí click vào table
         MouseListener mouseAction = new GoodReciptController(this);
         inventoryTable.addMouseListener(mouseAction);
-        
+
         btnInventoryUpdate.setEnabled(false);
     }
 
@@ -128,10 +127,25 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         inventoryName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         inventoryQuantity.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        inventoryQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inventoryQuantityKeyTyped(evt);
+            }
+        });
 
         inventoryPurchasingPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        inventoryPurchasingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inventoryPurchasingPriceKeyTyped(evt);
+            }
+        });
 
         inventorySellingPrice.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        inventorySellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inventorySellingPriceKeyTyped(evt);
+            }
+        });
 
         inventoryDescription.setColumns(20);
         inventoryDescription.setRows(5);
@@ -202,11 +216,6 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         jLabel7.setPreferredSize(new java.awt.Dimension(32, 16));
 
         inventoryComboBoxType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
-        inventoryComboBoxType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inventoryComboBoxTypeActionPerformed(evt);
-            }
-        });
 
         inventoryImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         inventoryImage.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -309,9 +318,27 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inventoryComboBoxTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventoryComboBoxTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inventoryComboBoxTypeActionPerformed
+    private void inventoryQuantityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inventoryQuantityKeyTyped
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_inventoryQuantityKeyTyped
+
+    private void inventoryPurchasingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inventoryPurchasingPriceKeyTyped
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }    }//GEN-LAST:event_inventoryPurchasingPriceKeyTyped
+
+    private void inventorySellingPriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inventorySellingPriceKeyTyped
+        char c = evt.getKeyChar();
+
+        if (!Character.isDigit(c)) {
+            evt.consume();
+        }    }//GEN-LAST:event_inventorySellingPriceKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnFormReset;
@@ -357,9 +384,9 @@ public class FormGoodReceipt extends javax.swing.JPanel {
     }
 
     public void Load() {
-        try{
+        try {
             ArrayList<Inventory> listInventorys = InventoryDAO.getInstance().getAll();
-        DefaultTableModel tableModel = (DefaultTableModel) this.inventoryTable.getModel();
+            DefaultTableModel tableModel = (DefaultTableModel) this.inventoryTable.getModel();
 
             tableModel.setRowCount(0);
 
@@ -379,21 +406,19 @@ public class FormGoodReceipt extends javax.swing.JPanel {
 
             this.inventoryTable.setModel(tableModel);
             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
 
             // Thả lỗi ra ngoài
             System.out.println(ex.toString());
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
         }
     }
-    
-    
-    public void SupperLoadingData(){
+
+    public void SupperLoadingData() {
         this.Load();
         this.DeleteAllForm();
         this.btnInventoryAdd.setEnabled(true);
         this.btnInventoryUpdate.setEnabled(false);
     }
-    
+
 }

@@ -71,7 +71,8 @@ public class processImage {
                 return f.getAbsolutePath();
             }
         }
-        return null;
+            File f = new File(imageFolderPath + imageName);
+            return f.getAbsolutePath();
     }
 
     // Lấy tên image
@@ -123,7 +124,7 @@ public class processImage {
         if (imageName != null && !"".equals(imageName)) {
             try {
                 File file = new File(getImagePath(imageName));
-                BufferedImage originalImage = ImageIO.read(file);
+                BufferedImage originalImage = ImageIO.read(file);                
                 // Thay đổi kích thước ảnh
                 BufferedImage resizedImage = resizeImage(originalImage, 284, 177);
                 return new ImageIcon(resizedImage);
