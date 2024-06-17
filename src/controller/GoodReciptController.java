@@ -19,7 +19,6 @@ import static helper.processImage.processImage.getImageNameExtension;
 import static helper.processImage.processImage.moveImage;
 import static helper.processImage.processImage.resizeImage;
 
-
 import model.Inventory;
 import raven.application.form.other.FormGoodReceipt;
 import raven.toast.Notifications;
@@ -88,7 +87,10 @@ public class GoodReciptController implements Action, MouseListener {
                     && !this.view.inventoryName.getText().isEmpty()
                     && !this.view.inventoryQuantity.getText().isEmpty()
                     && this.view.inventoryPurchasingPrice.getText() != null
-                    && this.view.inventorySellingPrice.getText() != null) {
+                    && this.view.inventorySellingPrice.getText() != null
+                    && this.view.inventoryBarcode.getText() != null
+                    && this.view.inventoryComboBoxStatus.getSelectedIndex() != -1
+                    ) {
 
                 String Type = this.view.inventoryComboBoxType.getSelectedItem().toString();
                 String Name = this.view.inventoryName.getText();
@@ -96,6 +98,8 @@ public class GoodReciptController implements Action, MouseListener {
                 String Description = this.view.inventoryDescription.getText();
                 Double PurchasingPrice = Double.valueOf(this.view.inventoryPurchasingPrice.getText());
                 Double SellingPrice = Double.valueOf(this.view.inventorySellingPrice.getText());
+                int Barcode = Integer.parseInt(this.view.inventoryBarcode.getText());
+                String Status = this.view.inventoryComboBoxStatus.getSelectedItem().toString();
 
                 Inventory temptInventory = new Inventory();
                 temptInventory.setType(Type);
@@ -104,12 +108,12 @@ public class GoodReciptController implements Action, MouseListener {
                 temptInventory.setDescription(Description);
                 temptInventory.setPurchasingPrice(PurchasingPrice);
                 temptInventory.setSellingPrice(SellingPrice);
-                
-                
+                temptInventory.setBarcode(Barcode);
+                temptInventory.setStatus(Status);
+
                 String fileName = moveImage(rootImagePath);
 
                 temptInventory.setImage(getImageNameExtension(fileName));
-
 
                 InventoryDAO.getInstance().insert(temptInventory);
 
@@ -130,10 +134,10 @@ public class GoodReciptController implements Action, MouseListener {
 
             // Lấy được id 
             InventoryDAO.getInstance().delete(Integer.parseInt(model.getValueAt(row, 0).toString()));
-            if(model.getValueAt(row, 7) != null && !"".equals(model.getValueAt(row, 7).toString())){
-                    deleteImage(model.getValueAt(row, 7).toString());
+            if (model.getValueAt(row, 7) != null && !"".equals(model.getValueAt(row, 7).toString())) {
+                deleteImage(model.getValueAt(row, 7).toString());
             }
-            
+
             this.view.SupperLoadingData();
         }
 
@@ -148,17 +152,22 @@ public class GoodReciptController implements Action, MouseListener {
                 inventory.setPurchasingPrice(Double.parseDouble(this.view.inventoryPurchasingPrice.getText()));
                 inventory.setSellingPrice(Double.parseDouble(this.view.inventorySellingPrice.getText()));
                 inventory.setDescription(this.view.inventoryDescription.getText());
-                
-                if(rootImagePath != null && !"".equals(rootImagePath)){
-                    deleteImage(this.view.inventoryImageName.getText());
-                    String fileName = moveImage(rootImagePath);
-                    inventory.setImage(fileName);
-                }
-                else{
+                inventory.setBarcode(Integer.valueOf(this.view.inventoryBarcode.getText()));
+                inventory.setStatus(this.view.inventoryComboBoxStatus.getSelectedItem().toString());
+
+                if (rootImagePath != null && !"".equals(rootImagePath)) {
+                    if (this.view.inventoryImageName.getText().toString().equals("place_holder_image.png")) {
+                        String fileName = moveImage(rootImagePath);
+                        inventory.setImage(fileName);
+                    } else {
+                        deleteImage(this.view.inventoryImageName.getText());
+                        String fileName = moveImage(rootImagePath);
+                        inventory.setImage(fileName);
+                    }
+                } else {
                     inventory.setImage(this.view.inventoryImageName.getText());
                 }
-                
-                
+
                 InventoryDAO.getInstance().update(inventory); // Update thông tin
                 System.out.println(inventory.toString());
 
@@ -194,12 +203,19 @@ public class GoodReciptController implements Action, MouseListener {
             if (model.getValueAt(row, 7) != null && model.getValueAt(row, 7) != "") {
                 this.view.inventoryImageName.setText(model.getValueAt(row, 7).toString());
                 this.view.inventoryImage.setIcon(getImage(model.getValueAt(row, 7).toString()));
-            }
-            else{
+            } else {
                 this.view.inventoryImageName.setText("place_holder_image.png");
                 this.view.inventoryImage.setIcon(getImage(this.view.inventoryImageName.getText()));
             }
-            
+
+            if (model.getValueAt(row, 8) != null) {
+                this.view.inventoryBarcode.setText(model.getValueAt(row, 8).toString());
+            } else {
+                this.view.inventoryBarcode.setText("");
+            }
+
+            this.view.inventoryComboBoxStatus.setSelectedItem(model.getValueAt(row, 9));
+
             this.view.btnInventoryAdd.setEnabled(false);
         }
     }
