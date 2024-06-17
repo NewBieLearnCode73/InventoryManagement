@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.*;
 import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -18,12 +19,16 @@ import static helper.processImage.processImage.getImage;
 import static helper.processImage.processImage.getImageNameExtension;
 import static helper.processImage.processImage.moveImage;
 import static helper.processImage.processImage.resizeImage;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
 
 import model.Inventory;
 import raven.application.form.other.FormGoodReceipt;
 import raven.toast.Notifications;
 
-public class GoodReciptController implements Action, MouseListener {
+public class GoodReciptController implements Action, MouseListener, KeyListener {
 
     public FormGoodReceipt view;
     public Inventory inventory = new Inventory(); // Đối tượng lưu tạm thời
@@ -89,8 +94,7 @@ public class GoodReciptController implements Action, MouseListener {
                     && this.view.inventoryPurchasingPrice.getText() != null
                     && this.view.inventorySellingPrice.getText() != null
                     && this.view.inventoryBarcode.getText() != null
-                    && this.view.inventoryComboBoxStatus.getSelectedIndex() != -1
-                    ) {
+                    && this.view.inventoryComboBoxStatus.getSelectedIndex() != -1) {
 
                 String Type = this.view.inventoryComboBoxType.getSelectedItem().toString();
                 String Name = this.view.inventoryName.getText();
@@ -124,7 +128,15 @@ public class GoodReciptController implements Action, MouseListener {
             }
         }
 
+        if (src.equals("Find")) {
+            DefaultTableModel obj = (DefaultTableModel) this.view.inventoryTable.getModel();
+            TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+            this.view.inventoryTable.setRowSorter(obj1);
+            obj1.setRowFilter(RowFilter.regexFilter(this.view.jTextFieldFind.getText()));
+        }
+
         if (src.equals("Load")) {
+            this.view.jTextFieldFind.setText("");
             this.view.SupperLoadingData();
         }
 
@@ -177,6 +189,7 @@ public class GoodReciptController implements Action, MouseListener {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Please choose one row in table!");
             }
         }
+
     }
 
     // Xử lí click chuột
@@ -265,5 +278,26 @@ public class GoodReciptController implements Action, MouseListener {
 
     @Override
     public void mouseExited(java.awt.event.MouseEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+      
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getSource() == this.view.jTextFieldFind) {
+            DefaultTableModel obj = (DefaultTableModel) this.view.inventoryTable.getModel();
+            TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+            this.view.inventoryTable.setRowSorter(obj1);
+            obj1.setRowFilter(RowFilter.regexFilter(this.view.jTextFieldFind.getText()));
+        }
+        
     }
 }
