@@ -5,64 +5,51 @@
 
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 
 public class Transaction {
     private int transactionID;
-    private String transactionType;
-    private LocalDate transactionDate;
-    private int userID;
+    private LocalDateTime transactionDate;
+    private double totalAmount;
 
     public Transaction() {}
 
-    public Transaction(int transactionID, String transactionType, LocalDate transactionDate, int userID) {
+    public Transaction(int transactionID, LocalDateTime transactionDate, double totalAmount) {
         this.transactionID = transactionID;
-        this.transactionType = transactionType;
         this.transactionDate = transactionDate;
-        this.userID = userID;
+        this.totalAmount = totalAmount;
     }
 
     public int getTransactionID() {
         return transactionID;
     }
 
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }   
+
     public void setTransactionID(int transactionID) {
         this.transactionID = transactionID;
     }
 
-    public String getTransactionType() {
-        return transactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        this.transactionType = transactionType;
-    }
-
-    public LocalDate getTransactionDate() {
-        return transactionDate;
-    }
-
-    public void setTransactionDate(LocalDate transactionDate) {
+    public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     @Override
     public String toString() {
-        return "Transaction{" +
-                "transactionID=" + transactionID +
-                ", transactionType='" + transactionType + '\'' +
-                ", transactionDate=" + transactionDate +
-                ", userID=" + userID +
-                '}';
+        return "Transaction{" + "transactionID=" + transactionID + ", transactionDate=" + transactionDate + ", totalAmount=" + totalAmount + '}';
     }
+    
 }
 

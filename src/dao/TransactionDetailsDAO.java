@@ -27,17 +27,15 @@ public class TransactionDetailsDAO implements DAOInterface<TransactionDetails>{
 			Connection con = JDBCUtil.getConnection();
 			
 			// Bước 2: Thực thi câu lệnh
-			String sql = "INSERT INTO TransactionDetails (TransactionID, InventoryID, Quantity) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO TransactionDetails (InventoryID, Quantity) VALUES (?, ?)";
 			
 			// Bước 3:  Tạo ra đối tượng PreparedStatement và truyền câu lệnh SQL
 			PreparedStatement pst = con.prepareStatement(sql);
 			
 			
 			// Truyền dữ liệu
-			pst.setInt(1, t.getTransactionID());
-			pst.setInt(2, t.getInventoryID());
-			pst.setInt(3, t.getQuantity());
-			
+			pst.setInt(1, t.getInventoryID());
+			pst.setInt(2, t.getQuantity());
 			
 			pst.executeUpdate();
 		}
@@ -48,49 +46,9 @@ public class TransactionDetailsDAO implements DAOInterface<TransactionDetails>{
 
 	@Override
 	public void update(TransactionDetails t) {
-		try {
-			Connection con = JDBCUtil.getConnection();
-			String sql = "UPDATE TransactionDetails SET InventoryID = ?, Quantity = ? WHERE TransactionID = ?";
-			PreparedStatement pst = con.prepareStatement(sql);
-			pst.setInt(1, t.getInventoryID());
-			pst.setInt(2, t.getQuantity());
-			pst.setInt(3, t.getTransactionID());
-			pst.executeUpdate();
-			JDBCUtil.closeConnection(con);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		
 	}
-	
-    public void updateInventoryID(int transactionID, int newInventoryID) {
-        try {
-            Connection con = JDBCUtil.getConnection();
-            String sql = "UPDATE TransactionDetails SET InventoryID = ? WHERE TransactionID = ?";
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, newInventoryID);
-            pst.setInt(2, transactionID);
-            pst.executeUpdate();
-            JDBCUtil.closeConnection(con);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    // Update Quantity
-    public void updateQuantity(int transactionID, int newQuantity) {
-        try {
-            Connection con = JDBCUtil.getConnection();
-            String sql = "UPDATE TransactionDetails SET Quantity = ? WHERE TransactionID = ?";
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, newQuantity);
-            pst.setInt(2, transactionID);
-            pst.executeUpdate();
-            JDBCUtil.closeConnection(con);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-	
+		
     @Override
     public void delete(int id) {
         try {

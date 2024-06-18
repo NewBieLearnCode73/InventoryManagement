@@ -1,76 +1,165 @@
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-CREATE TABLE `Inventory` (
+CREATE TABLE IF NOT EXISTS `Inventory` (
   `InventoryID` int NOT NULL AUTO_INCREMENT,
   `Type` varchar(50) DEFAULT NULL,
   `Name` varchar(100) NOT NULL,
   `Quantity` int unsigned NOT NULL,
   `Image` varchar(255) DEFAULT NULL,
   `Description` text,
-  `PurchasingPrice` decimal(10,2) DEFAULT NULL,
-  `SellingPrice` decimal(10,2) DEFAULT NULL,
+  `PurchasingPrice` double DEFAULT NULL,
+  `SellingPrice` double DEFAULT NULL,
+  `Barcode` int DEFAULT NULL,
+  `Status` enum('Active','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Active',
   PRIMARY KEY (`InventoryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Transaction` (
+CREATE TABLE IF NOT EXISTS `Transactions` (
   `TransactionID` int NOT NULL AUTO_INCREMENT,
-  `TransactionType` enum('IN','OUT') NOT NULL,
-  `TransactionDate` date NOT NULL,
-  `UserID` int DEFAULT NULL,
-  PRIMARY KEY (`TransactionID`),
-  KEY `UserID` (`UserID`),
-  CONSTRAINT `Transaction_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `TransactionDate` datetime NOT NULL,
+  `TotalAmount` double DEFAULT NULL,
+  PRIMARY KEY (`TransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `TransactionDetails` (
+CREATE TABLE IF NOT EXISTS `TransactionDetails` (
   `TransactionDetailID` int NOT NULL AUTO_INCREMENT,
   `TransactionID` int DEFAULT NULL,
   `InventoryID` int DEFAULT NULL,
   `Quantity` int unsigned NOT NULL,
+  `PurchasingPriceAtTransaction` double unsigned NOT NULL DEFAULT '0',
+  `PriceAtTransaction` double unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`TransactionDetailID`),
-  KEY `TransactionID` (`TransactionID`),
-  KEY `InventoryID` (`InventoryID`),
-  CONSTRAINT `TransactionDetails_ibfk_1` FOREIGN KEY (`TransactionID`) REFERENCES `Transaction` (`TransactionID`),
-  CONSTRAINT `TransactionDetails_ibfk_2` FOREIGN KEY (`InventoryID`) REFERENCES `Inventory` (`InventoryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FK_TransactionDetails_Transactions` (`TransactionID`),
+  KEY `FK_TransactionDetails_Inventory` (`InventoryID`),
+  CONSTRAINT `FK_TransactionDetails_Inventory` FOREIGN KEY (`InventoryID`) REFERENCES `Inventory` (`InventoryID`),
+  CONSTRAINT `FK_TransactionDetails_Transactions` FOREIGN KEY (`TransactionID`) REFERENCES `Transactions` (`TransactionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Users` (
+CREATE TABLE IF NOT EXISTS `Users` (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) NOT NULL,
   `Password` varchar(50) NOT NULL,
-  `Role` enum('ADMIN','USER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Username` (`Username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Inventory` (`InventoryID`, `Type`, `Name`, `Quantity`, `Image`, `Description`, `PurchasingPrice`, `SellingPrice`) VALUES
-(2, 'Ghế ngồi', 'Ghế quỳ tatami', 100, NULL, NULL, '250000.00', '300000.00');
+# Trigger tự động tạo dữ liệu cho hóa đơn, và chi tiếc hóa đơn
+
+CREATE TRIGGER before_insert_transactiondetails
+BEFORE INSERT ON TransactionDetails
+FOR EACH ROW
+BEGIN
+    DECLARE current_selling_price DOUBLE;
+    DECLARE current_purchasing_price DOUBLE;
+
+    -- Lấy giá bán hiện tại và giá nhập từ bảng Inventory
+    SELECT SellingPrice, PurchasingPrice INTO current_selling_price, current_purchasing_price
+    FROM Inventory
+    WHERE InventoryID = NEW.InventoryID;
+
+    -- Gán giá trị lấy được vào PriceAtTransaction và PurchasingPriceAtTransaction
+    SET NEW.PriceAtTransaction = current_selling_price;
+    SET NEW.PurchasingPriceAtTransaction = current_purchasing_price;
+
+    -- Kiểm tra xem TransactionID có được cung cấp không, nếu không, sử dụng biến phiên hoặc tạo một giao dịch mới
+    IF @current_transaction_id IS NULL THEN
+        INSERT INTO Transactions (TransactionDate, TotalAmount)
+        VALUES (NOW(), 0);
+
+        -- Lấy TransactionID vừa được chèn và gán nó vào biến phiên
+        SET @current_transaction_id = LAST_INSERT_ID();
+    END IF;
+
+    -- Gán TransactionID cho TransactionDetails mới
+    SET NEW.TransactionID = @current_transaction_id;
+
+    -- Tính tổng số tiền cho giao dịch
+    SET @current_total_amount = (SELECT COALESCE(SUM(Quantity * PriceAtTransaction), 0)
+                                 FROM TransactionDetails
+                                 WHERE TransactionID = NEW.TransactionID);
+
+    -- Cập nhật tổng số tiền trong bảng Transactions
+    UPDATE Transactions
+    SET TotalAmount = @current_total_amount + (NEW.Quantity * NEW.PriceAtTransaction)
+    WHERE TransactionID = NEW.TransactionID;
+END;
+
+# Ví dụ cách hoạt động
+/*
+INSERT INTO Inventory (Type, Name, Quantity, PurchasingPrice, SellingPrice, Barcode, Status)
+VALUES ('Electronics', 'Laptop', 50, 500.00, 700.00, 123456, 'Active');
+
+INSERT INTO Inventory (Type, Name, Quantity, PurchasingPrice, SellingPrice, Barcode, Status)
+VALUES ('Electronics', 'Smartphone', 100, 300.00, 500.00, 234567, 'Active');
+
+INSERT INTO Inventory (Type, Name, Quantity, PurchasingPrice, SellingPrice, Barcode, Status)
+VALUES ('Appliances', 'Refrigerator', 20, 800.00, 1000.00, 345678, 'Active');
+
+INSERT INTO Inventory (Type, Name, Quantity, PurchasingPrice, SellingPrice, Barcode, Status)
+VALUES ('Furniture', 'Chair', 200, 50.00, 100.00, 456789, 'Active');
 
 
-INSERT INTO `Transaction` (`TransactionID`, `TransactionType`, `TransactionDate`, `UserID`) VALUES
-(3, 'IN', '2024-05-29', 1);
+-- Reset biến session
+SET @current_transaction_id = NULL;
+
+-- Insert sản phẩm 1
+INSERT INTO TransactionDetails (InventoryID, Quantity)
+VALUES (1, 5);
+
+-- Insert sản phẩm 2
+INSERT INTO TransactionDetails (InventoryID, Quantity)
+VALUES (2, 10);
+
+-- Insert sản phẩm 3
+INSERT INTO TransactionDetails (InventoryID, Quantity)
+VALUES (3, 2);
+
+-- Insert sản phẩm 4
+INSERT INTO TransactionDetails (InventoryID, Quantity)
+VALUES (4, 7);
+
+-- Kiểm tra TransactionID được tạo
+SELECT @current_transaction_id;
+
+-- Kiểm tra chi tiết giao dịch của TransactionID vừa tạo
+SELECT * FROM TransactionDetails WHERE TransactionID = @current_transaction_id;
+
+-- Kiểm tra tổng số tiền của giao dịch
+SELECT * FROM Transactions WHERE TransactionID = @current_transaction_id;
+
+*/
 
 
-INSERT INTO `TransactionDetails` (`TransactionDetailID`, `TransactionID`, `InventoryID`, `Quantity`) VALUES
-(5, 3, 2, 100);
+-- Tạo trigger để giảm số lượng trong bảng Inventory khi thêm TransactionDetails
+CREATE TRIGGER after_insert_transactiondetails
+AFTER INSERT ON TransactionDetails
+FOR EACH ROW
+BEGIN
+    -- Giảm số lượng trong Inventory
+    UPDATE Inventory
+    SET Quantity = Quantity - NEW.Quantity
+    WHERE InventoryID = NEW.InventoryID;
+END;
 
 
-INSERT INTO `Users` (`UserID`, `Username`, `Password`, `Role`) VALUES
-(1, 'admin', 'admin', 'USER');
+-- Tạo stored procedure để lấy thông tin giao dịch dựa trên ID
+CREATE PROCEDURE GetTransactionDetails(IN transaction_id INT)
+BEGIN
+    SELECT
+        T.TransactionID,
+        T.TransactionDate,
+        TD.Quantity,
+        TD.PriceAtTransaction,
+        TD.Quantity * TD.PriceAtTransaction AS TotalPrice,
+        I.Name AS ProductName,
+        I.Description AS ProductDescription
+    FROM
+        Transactions T
+    JOIN
+        TransactionDetails TD ON T.TransactionID = TD.TransactionID
+    JOIN
+        Inventory I ON TD.InventoryID = I.InventoryID
+    WHERE
+        T.TransactionID = transaction_id;
+END;
 
+-- CALL GetTransactionDetails(3); // lẤY RA THÔNG TIN GIAO DỊCH CÓ ID BẰNG 3
 
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
