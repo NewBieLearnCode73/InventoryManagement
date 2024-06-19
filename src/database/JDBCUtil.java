@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package database;
 
 import java.sql.Connection;
@@ -10,21 +9,22 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 public class JDBCUtil {
-public static Connection getConnection() {
+
+    public static Connection getConnection() {
         Connection c = null;
 
         // Dùng để đăng ký cơ sở dữ liệu
         try {
             // Đăng ký MySQL Driver với DriverManager
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3308/inventory_management";
+            String url = "jdbc:mysql://localhost:3308/inventory_management?serverTimezone=UTC%2B7";
             String username = "root";
             String password = "root";
 
-            // Tạo kết nối
+            // Tạo kết nối  
             c = DriverManager.getConnection(url, username, password);
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -56,4 +56,3 @@ public static Connection getConnection() {
         }
     }
 }
-
