@@ -146,7 +146,8 @@ public class GoodReciptController implements Action, MouseListener, KeyListener 
 
             // Lấy được id 
             InventoryDAO.getInstance().delete(Integer.parseInt(model.getValueAt(row, 0).toString()));
-            if (model.getValueAt(row, 7) != null && !"".equals(model.getValueAt(row, 7).toString())) {
+            
+            if ((model.getValueAt(row, 7) != null && !"".equals(model.getValueAt(row, 7).toString())) && !"place_holder_image.png".equals(model.getValueAt(row, 7).toString())) {
                 deleteImage(model.getValueAt(row, 7).toString());
             }
 

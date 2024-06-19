@@ -29,8 +29,9 @@ public class Application extends javax.swing.JFrame {
     
     public Application() {
         initComponents();
-        setSize(new Dimension(1600, 768));
+        setSize(new Dimension(1680, 768));
         setLocationRelativeTo(null);
+        setResizable(false);
         mainForm = new MainForm();
         loginForm = new LoginForm();
         setContentPane(loginForm);

@@ -19,6 +19,7 @@ public class processImage {
     
     private static String dir = System.getProperty("user.dir");
     private static String imageFolderPath = dir + "\\src\\image\\";
+    private static String imagePlaceHolder = "place_holder_image.png";
     
     // Di chuyển image vào bên trong thư mục image của dự án
     public static String moveImage(String rootImagePath) {
@@ -69,6 +70,10 @@ public class processImage {
             File f = new File(imageFolderPath + imageName);
             if (f.exists()) {
                 return f.getAbsolutePath();
+            }
+            else{
+                File f0 = new File(imageFolderPath + imagePlaceHolder);
+                return f0.getAbsolutePath();
             }
         }
             File f = new File(imageFolderPath + imageName);
