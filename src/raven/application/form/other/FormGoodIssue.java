@@ -30,6 +30,9 @@ public class FormGoodIssue extends javax.swing.JPanel {
         
         inventoryImage.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
         
+        // Ẩn
+        this.inventoryImageName.setVisible(false);
+        this.inventoryQuantityAvailable.setVisible(false);
         
         // Khóa ô
         this.inventoryId.setEnabled(false);
