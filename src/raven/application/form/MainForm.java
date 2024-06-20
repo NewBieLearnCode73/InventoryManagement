@@ -19,7 +19,7 @@ import raven.application.Application;
 import raven.application.form.other.FormDashboard;
 import raven.application.form.other.FormGoodReceipt;
 import raven.application.form.other.FormGoodIssue;
-import raven.application.form.other.FormUpdate;
+import raven.application.form.other.FormInvoice;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -75,18 +75,26 @@ public class MainForm extends JLayeredPane {
                 Application.showForm(new FormDashboard());
             } 
             else if (index == 1) {
-                if (subIndex == 1) {
-                    Application.showForm(new FormGoodReceipt());
-                } else if (subIndex == 2) {
-                    Application.showForm(new FormGoodIssue());
-                } else if (subIndex == 3) {
-                    Application.showForm(new FormUpdate());
-                } 
-                
-                else {
-                    action.cancel();
-                }
-            } else if (index == 9) {
+//                if (subIndex == 1) {
+//                    Application.showForm(new FormGoodReceipt());
+//                } else if (subIndex == 2) {
+//                    Application.showForm(new FormGoodIssue());
+//                } else if (subIndex == 3) {
+//                    Application.showForm(new FormUpdate());
+//                } 
+//                
+//                else {
+//                    action.cancel();
+//                }
+                Application.showForm(new FormGoodReceipt());
+            } 
+            else if(index == 2){
+                Application.showForm(new FormGoodIssue());
+            }
+            else if(index == 3){
+                Application.showForm(new FormInvoice());
+            }
+            else if (index == 4) {
                 Application.logout();
             } else {
                 action.cancel();
