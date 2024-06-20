@@ -1,3 +1,5 @@
+SET time_zone = '+07:00';
+
 CREATE TABLE IF NOT EXISTS `Inventory` (
   `InventoryID` int NOT NULL AUTO_INCREMENT,
   `Type` varchar(50) DEFAULT NULL,

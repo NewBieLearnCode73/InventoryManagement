@@ -211,6 +211,55 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             throw new RuntimeException(e);
         }
     }
+    
+    public boolean exportInvoice(ArrayList<Inventory> list){
+
+        Connection con = null;
+        PreparedStatement stmt = null;
+        try {
+            con = JDBCUtil.getConnection();
+
+            String firstSql = "SET @current_transaction_id = NULL;"; // Assuming MySQL syntax
+
+            stmt = con.prepareStatement(firstSql);
+            stmt.executeUpdate();
+
+            String insertSql = "INSERT INTO TransactionDetails (InventoryID, Quantity) VALUES (?, ?)";
+            stmt = con.prepareStatement(insertSql);
+
+            for (Inventory inventory : list) {
+                stmt.setInt(1, inventory.getInventoryID());
+                stmt.setInt(2, inventory.getQuantity());
+                stmt.addBatch(); 
+            }
+
+            stmt.executeBatch();
+
+            
+            JDBCUtil.closeConnection(con);
+
+            return true;
+
+        } catch (SQLException ex) {
+            // Handle any SQL exceptions
+            System.err.println("SQL Exception: " + ex.getMessage());
+            ex.printStackTrace(); // Print stack trace for debugging
+
+            try {
+                if (con != null) {
+                    con.rollback(); 
+                }
+            } catch (SQLException rollbackEx) {
+                System.err.println("Rollback Exception: " + rollbackEx.getMessage());
+                rollbackEx.printStackTrace();
+            }
+
+            return false; 
+
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+    }
 
     @Override
     public ArrayList<Inventory> selectByCondition(String condition) {
