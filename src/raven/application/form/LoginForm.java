@@ -60,7 +60,6 @@ public class LoginForm extends javax.swing.JPanel {
         txtUser = new javax.swing.JTextField();
         lbPass = new javax.swing.JLabel();
         txtPass = new javax.swing.JPasswordField();
-        roleComboBox = new javax.swing.JComboBox<>();
         cmdLogin = new javax.swing.JButton();
 
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -74,9 +73,6 @@ public class LoginForm extends javax.swing.JPanel {
         lbPass.setText("Password");
         panelLogin1.add(lbPass);
         panelLogin1.add(txtPass);
-
-        roleComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "User"}));
-        panelLogin1.add(roleComboBox);
 
         cmdLogin.setText("Login");
         cmdLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -121,7 +117,6 @@ public class LoginForm extends javax.swing.JPanel {
     private javax.swing.JLabel lbTitle;
     private javax.swing.JLabel lbUser;
     private raven.application.form.PanelLogin panelLogin1;
-    private javax.swing.JComboBox<String> roleComboBox;
     public javax.swing.JPasswordField txtPass;
     public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
