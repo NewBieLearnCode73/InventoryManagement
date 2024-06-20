@@ -1,5 +1,6 @@
 package raven.application.form.other;
 
+import helper.barcodeScaner.BarcodeScannerTask;
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.GoodReciptController;
 import dao.InventoryDAO;
@@ -14,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Inventory;
 import model.InventoryType;
 import raven.toast.Notifications;
-import model.GoodReceiptModel;
-
 /**
  *
  * @author Raven
@@ -66,6 +65,9 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         
 
         btnInventoryUpdate.setEnabled(false);
+        
+        // Xử lí bấm nút scan
+        barcodeBtn.addActionListener(evt -> barcodeBtnActionPerformed(evt));
     }
 
     @SuppressWarnings("unchecked")
@@ -104,6 +106,7 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         inventoryComboBoxStatus = new javax.swing.JComboBox<>();
         jTextFieldFind = new javax.swing.JTextField();
         btnFind = new javax.swing.JButton();
+        barcodeBtn = new javax.swing.JButton();
 
         lb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -253,6 +256,14 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         btnFind.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFind.setText("Find");
 
+        barcodeBtn.setText("Scan");
+        barcodeBtn.setActionCommand("barcodeBtn");
+        barcodeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                barcodeBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -294,8 +305,11 @@ public class FormGoodReceipt extends javax.swing.JPanel {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(inventoryQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(inventoryComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(inventoryBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGap(105, 105, 105)))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addComponent(inventoryBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(barcodeBtn)))))
+                                        .addGap(186, 186, 186)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -345,7 +359,8 @@ public class FormGoodReceipt extends javax.swing.JPanel {
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(inventoryBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(inventoryBarcode, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(barcodeBtn))
                         .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(inventoryImageName)
@@ -407,7 +422,13 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_inventorySellingPriceKeyTyped
 
+    private void barcodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barcodeBtnActionPerformed
+        Thread scannerThread = new Thread(new BarcodeScannerTask( inventoryBarcode));
+        scannerThread.start();
+    }//GEN-LAST:event_barcodeBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton barcodeBtn;
     public javax.swing.JButton btnFind;
     public javax.swing.JButton btnFormReset;
     public javax.swing.JButton btnImageBrowse;
