@@ -2,10 +2,8 @@ package raven.application.form.other;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.GoodIssueController;
-import controller.GoodReciptController;
 import dao.InventoryDAO;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;

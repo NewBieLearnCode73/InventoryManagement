@@ -1,6 +1,13 @@
 package raven.application.form.other;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import controller.InvoiceController;
+import dao.TransactionDAO;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import model.Transaction;
+import raven.toast.Notifications;
 
 /**
  *
@@ -10,8 +17,13 @@ public class FormInvoice extends javax.swing.JPanel {
 
     public FormInvoice() {
         initComponents();
+        loadTransaction();
         lb.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
+        
+        MouseListener mouseListener = new InvoiceController(this);
+        this.transactionTable.addMouseListener(mouseListener);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -38,7 +50,7 @@ public class FormInvoice extends javax.swing.JPanel {
             new Object [][] {
             },
             new String [] {
-                "TransactionID", "TransactionDate", "Quantity", "PriceAtTransaction", "TotalPrice", "ProductName", "ProductDescription"
+                "TransactionDate", "Quantity", "PriceAtTransaction", "TotalPrice", "ProductName", "ProductDescription"
             }
         ));
         jScrollPane2.setViewportView(invoiceDetailsTable);
@@ -158,6 +170,35 @@ public class FormInvoice extends javax.swing.JPanel {
     private void btnExportInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportInvoiceActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExportInvoiceActionPerformed
+
+    public final void loadTransaction() {
+        try {
+            ArrayList<Transaction> listTransaction = TransactionDAO.getInstance().getAll();
+            DefaultTableModel transactionTableModel = (DefaultTableModel) this.transactionTable.getModel();
+
+            transactionTableModel.setRowCount(0);
+            
+            for (Transaction t : listTransaction) {
+                Object[] row = new Object[]{
+                    t.getTransactionID(),
+                    t.getTransactionDate(),
+                    t.getTotalAmount()
+                };
+                
+                transactionTableModel.addRow(row);
+            }
+            this.transactionTable.setModel(transactionTableModel);
+            
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
+        }
+    }
+    
+    public void deleteInvoiceForm() {
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnExportInvoice;
