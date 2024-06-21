@@ -2,7 +2,11 @@ package raven.application.form;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.LoginController;
+import helper.preferencesManager.UserPreferences;
 import java.awt.FlowLayout;
+import java.security.GeneralSecurityException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import model.LoginModel;
@@ -16,6 +20,7 @@ import raven.application.Application;
 public class LoginForm extends javax.swing.JPanel {
     LoginModel model;
     LoginController action;
+    public UserPreferences userPreferences = new UserPreferences();
 
     
     public LoginForm() {
@@ -31,6 +36,17 @@ public class LoginForm extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setLayout(new FlowLayout());
         frame.setSize(1200, 800);
+        
+        try {
+            // kiểm tra preferences
+            String[] loginPreferences = userPreferences.loadLogin();
+            if(loginPreferences != null) {
+                txtUser.setText(loginPreferences[0]);                
+                txtPass.setText(loginPreferences[1]);
+            }
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
 
