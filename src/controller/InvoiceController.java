@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import model.InvoiceDetail;
-import model.TransactionDetails;
 import raven.application.form.other.FormInvoice;
 
 /**

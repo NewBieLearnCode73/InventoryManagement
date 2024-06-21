@@ -3,10 +3,19 @@ package raven.application.form.other;
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.InvoiceController;
 import dao.TransactionDAO;
+import dao.TransactionDetailsDAO;
+import helper.print.InvoicePayment;
+import helper.print.InvoiceReportField;
+import helper.print.PaymentManager;
 import java.awt.event.MouseListener;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+import model.InvoiceDetail;
 import model.Transaction;
+import model.TransactionDetails;
 import raven.toast.Notifications;
 
 /**
@@ -23,7 +32,12 @@ public class FormInvoice extends javax.swing.JPanel {
         
         MouseListener mouseListener = new InvoiceController(this);
         this.transactionTable.addMouseListener(mouseListener);
-
+        
+        try {
+            PaymentManager.getInstance().compileReport();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -168,7 +182,34 @@ public class FormInvoice extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExportInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportInvoiceActionPerformed
-        // TODO add your handling code here:
+        try {
+            DefaultTableModel transactionTable = (DefaultTableModel) this.transactionTable.getModel();
+            
+            int row = this.transactionTable.getSelectedRow();
+            Integer transactionID = (Integer) transactionTable.getValueAt(row, 0);
+            LocalDateTime date = (LocalDateTime) transactionTable.getValueAt(row, 1);
+            Double totalPrice = (Double) transactionTable.getValueAt(row, 2);
+            
+            ArrayList<InvoiceDetail> list = TransactionDetailsDAO.getInstance().getListTransactionDetail(transactionID);
+            
+           ArrayList<InvoiceReportField> fields = new ArrayList<>();
+           for (InvoiceDetail i : list) {
+              InvoiceReportField tmp = new InvoiceReportField();
+              tmp.setName(i.getProducName());
+              tmp.setPrice(i.getPrice().toString());
+              tmp.setTotal(i.getTotalPrice().toString());
+              tmp.setQty(i.getQuantityl().toString());
+              
+              fields.add(tmp);
+           }
+            
+            InvoicePayment dataPrint = new InvoicePayment("Con cac", date.toString(), fields, totalPrice.intValue());
+            
+            PaymentManager.getInstance().printInvoicePayment(dataPrint);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnExportInvoiceActionPerformed
 
     public final void loadTransaction() {
