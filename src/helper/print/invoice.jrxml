@@ -30,21 +30,21 @@
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Fz Poppins" size="16"/>
+					<font fontName="Times New Roman" size="16"/>
 				</textElement>
 				<text><![CDATA[INVOICE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="30" width="52" height="20" uuid="c2a179db-a7bf-43f1-9dcb-39be013f61a8"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font fontName="Fz Poppins" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<text><![CDATA[Staff]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="50" width="52" height="20" uuid="f16ce12e-3a5f-4ad1-9244-8954982f0f62"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Fz Poppins" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<text><![CDATA[Date]]></text>
 			</staticText>

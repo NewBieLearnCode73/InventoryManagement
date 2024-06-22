@@ -3,6 +3,7 @@ package raven.application.form.other;
 import com.formdev.flatlaf.FlatClientProperties;
 import controller.GoodIssueController;
 import dao.InventoryDAO;
+import helper.barcodeScaner.BarcodeScannerTask;
 import java.awt.Color;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -130,6 +131,11 @@ public class FormGoodIssue extends javax.swing.JPanel {
 
         btnBarcode.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBarcode.setText("Scan Barcode");
+        btnBarcode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBarcodeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -423,6 +429,11 @@ public class FormGoodIssue extends javax.swing.JPanel {
     private void btnResetCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetCartActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnResetCartActionPerformed
+
+    private void btnBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarcodeActionPerformed
+                Thread scannerThread = new Thread(new BarcodeScannerTask( this.jTextFieldFind));
+                scannerThread.start();
+    }//GEN-LAST:event_btnBarcodeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAddToCart;
