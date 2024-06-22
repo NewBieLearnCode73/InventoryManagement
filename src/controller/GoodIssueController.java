@@ -148,6 +148,15 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             this.LoadCart();
         }
     }
+        
+        // Sự kiện tìm kiếm trong bảng inventory
+        if (src.equals("Find")) {
+            DefaultTableModel obj = (DefaultTableModel) this.view.inventoryTable.getModel();
+            TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+            this.view.inventoryTable.setRowSorter(obj1);
+            obj1.setRowFilter(RowFilter.regexFilter(this.view.jTextFieldFind.getText()));
+        }
+        
         // Xuất hóa đơn
         if (src.equals("Export invoice")) {
             if (!listInventorys.isEmpty()) {
