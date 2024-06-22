@@ -1,6 +1,8 @@
 
+import dao.InventoryDAO;
 import dao.TransactionDAO;
 import java.util.ArrayList;
+import model.Inventory;
 import model.Transaction;
 
 /*
@@ -11,7 +13,8 @@ import model.Transaction;
 
 public class test {
     public static void main(String[] args) {
-        Transaction list = TransactionDAO.getInstance().getById(1);
-        System.out.println(list.toString());
+//        Transaction list = TransactionDAO.getInstance().getById(1);
+//        System.out.println(list.toString());
+        System.out.println(TransactionDAO.getInstance().getProfitByMonth(3, 2024));
     }
 }

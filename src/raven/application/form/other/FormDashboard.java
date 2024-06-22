@@ -1,6 +1,8 @@
 package raven.application.form.other;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import dao.InventoryDAO;
+import dao.TransactionDAO;
 import java.awt.Color;
 import javax.swing.Icon;
 import model.CardModel;
@@ -25,34 +27,31 @@ public class FormDashboard extends javax.swing.JPanel {
     }
     
     private void initCardData(){
-        Icon icon2 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.CHECK_BOX, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
+        Icon icon2 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.SHOPPING_CART, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
         Icon icon3 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.MONETIZATION_ON, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
-
         Icon icon4 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.BUSINESS_CENTER, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
-
         Icon icon5 = IconFontSwing.buildIcon(GoogleMaterialDesignIcons.INSERT_CHART, 60, new Color(255, 255, 255, 100), new Color(255, 255, 255, 15));
 
-        card2.setData(new CardModel("Inventories", 30000, 20,icon2));
-        card6.setData(new CardModel("Income", 300000, 60,icon3));
-        card7.setData(new CardModel("Purchasing", 18000, 60,icon4));
-        card8.setData(new CardModel("Stock", 100, 60,icon5));
+        card2.setData(new CardModel("Inventories", InventoryDAO.getInstance().getTotalOfInventory(),100 ,icon2));
+        card6.setData(new CardModel("Profit", InventoryDAO.getInstance().getProfit(), 100 ,icon3));
+        card7.setData(new CardModel("Purchasing", InventoryDAO.getInstance().getPurchasing(),100 ,icon4));
+        card8.setData(new CardModel("Total Amount", TransactionDAO.getInstance().getTotalAmount(),100 ,icon5));
         
-        chart.addLegend("Income", new Color(12, 84, 175), new Color(0, 108, 247));
-        chart.addLegend("Expense", new Color(54, 4, 143), new Color(104, 49, 200));
+        chart.addLegend("Total Amount", new Color(12, 84, 175), new Color(0, 108, 247));
         chart.addLegend("Profit", new Color(5, 125, 0), new Color(95, 209, 69));
-        chart.addLegend("Cost", new Color(186, 37, 37), new Color(241, 100, 120));
-        chart.addData(new ModelChart("January", new double[]{500, 200, 80, 89}));
-        chart.addData(new ModelChart("February", new double[]{600, 750, 90, 150}));
-        chart.addData(new ModelChart("March", new double[]{200, 350, 460, 900}));
-        chart.addData(new ModelChart("April", new double[]{480, 150, 750, 700}));
-        chart.addData(new ModelChart("May", new double[]{350, 540, 300, 150}));
-        chart.addData(new ModelChart("June", new double[]{190, 280, 81, 200}));
-        chart.addData(new ModelChart("July", new double[]{420, 380, 220, 300}));
-        chart.addData(new ModelChart("August", new double[]{520, 430, 130, 400}));
-        chart.addData(new ModelChart("September", new double[]{390, 470, 150, 230}));
-        chart.addData(new ModelChart("October", new double[]{210, 260, 100, 160}));
-        chart.addData(new ModelChart("November", new double[]{480, 520, 170, 390}));
-        chart.addData(new ModelChart("December", new double[]{570, 610, 250, 450}));
+
+        chart.addData(new ModelChart("January", new double[]{TransactionDAO.getInstance().getProfitByMonth(1, 2024), TransactionDAO.getInstance().getTotalAmountByMount(1, 2024)}));
+        chart.addData(new ModelChart("February", new double[]{TransactionDAO.getInstance().getProfitByMonth(2, 2024), TransactionDAO.getInstance().getTotalAmountByMount(2, 2024)}));
+        chart.addData(new ModelChart("March", new double[]{TransactionDAO.getInstance().getProfitByMonth(3, 2024), TransactionDAO.getInstance().getTotalAmountByMount(3, 2024)}));
+        chart.addData(new ModelChart("April", new double[]{TransactionDAO.getInstance().getProfitByMonth(4, 2024), TransactionDAO.getInstance().getTotalAmountByMount(4, 2024)}));
+        chart.addData(new ModelChart("May", new double[]{TransactionDAO.getInstance().getProfitByMonth(5, 2024), TransactionDAO.getInstance().getTotalAmountByMount(5, 2024)}));
+        chart.addData(new ModelChart("June", new double[]{TransactionDAO.getInstance().getProfitByMonth(6, 2024), TransactionDAO.getInstance().getTotalAmountByMount(6, 2024)}));
+        chart.addData(new ModelChart("July", new double[]{TransactionDAO.getInstance().getProfitByMonth(7, 2024), TransactionDAO.getInstance().getTotalAmountByMount(7, 2024)}));
+        chart.addData(new ModelChart("August", new double[]{TransactionDAO.getInstance().getProfitByMonth(8, 2024), TransactionDAO.getInstance().getTotalAmountByMount(8, 2024)}));
+        chart.addData(new ModelChart("September", new double[]{TransactionDAO.getInstance().getProfitByMonth(9, 2024), TransactionDAO.getInstance().getTotalAmountByMount(9, 2024)}));
+        chart.addData(new ModelChart("October", new double[]{TransactionDAO.getInstance().getProfitByMonth(10, 2024), TransactionDAO.getInstance().getTotalAmountByMount(10, 2024)}));
+        chart.addData(new ModelChart("November", new double[]{TransactionDAO.getInstance().getProfitByMonth(11, 2024), TransactionDAO.getInstance().getTotalAmountByMount(11, 2024)}));
+        chart.addData(new ModelChart("December", new double[]{TransactionDAO.getInstance().getProfitByMonth(12, 2024), TransactionDAO.getInstance().getTotalAmountByMount(12, 2024)}));
 
         chart.start();
     }
