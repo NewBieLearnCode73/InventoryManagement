@@ -152,7 +152,8 @@ BEGIN
         TD.PriceAtTransaction,
         TD.Quantity * TD.PriceAtTransaction AS TotalPrice,
         I.Name AS ProductName,
-        I.Description AS ProductDescription
+        I.Description AS ProductDescription,
+        I.Barcode
     FROM
         Transactions T
     JOIN
