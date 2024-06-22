@@ -165,3 +165,58 @@ END;
 
 -- CALL GetTransactionDetails(3); // lẤY RA THÔNG TIN GIAO DỊCH CÓ ID BẰNG 3
 
+-- Tính lợi nhuận
+CREATE PROCEDURE CalculateProfit(OUT profit DOUBLE)
+BEGIN
+    -- Tính tổng doanh thu từ các giao dịch
+    DECLARE totalRevenue DOUBLE DEFAULT 0;
+    DECLARE totalCost DOUBLE DEFAULT 0;
+    
+    -- Tính tổng doanh thu
+    SELECT SUM(TD.Quantity * TD.PriceAtTransaction) INTO totalRevenue
+    FROM TransactionDetails TD;
+    
+    -- Tính tổng chi phí
+    SELECT SUM(TD.Quantity * TD.PurchasingPriceAtTransaction) INTO totalCost
+    FROM TransactionDetails TD;
+
+    -- Tính lợi nhuận
+    SET profit = totalRevenue - totalCost;
+END;
+
+-- CALL CalculateProfit(@profit);
+-- SELECT @profit AS TotalProfit;
+
+-- Lợi nhuận hàng tháng
+CREATE FUNCTION GetProfitByMonth(targetMonth INT, targetYear INT)
+RETURNS DOUBLE
+DETERMINISTIC
+BEGIN
+    DECLARE totalProfit DOUBLE;
+
+    SELECT COALESCE(SUM(TD.Quantity * (TD.PriceAtTransaction - TD.PurchasingPriceAtTransaction)), 0) INTO totalProfit
+    FROM TransactionDetails TD
+    JOIN Transactions T ON TD.TransactionID = T.TransactionID
+    WHERE MONTH(T.TransactionDate) = targetMonth AND YEAR(T.TransactionDate) = targetYear;
+
+    RETURN totalProfit;
+END;
+
+-- SELECT GetProfitByMonth(6,2024);
+
+-- Tổng số tiền thu hàng tháng
+CREATE FUNCTION GetTotalAmountForMonthYear(month_val INT, year_val INT)
+RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE total DECIMAL(10, 2);
+
+    SELECT COALESCE(SUM(TotalAmount), 0)
+    INTO total
+    FROM Transactions
+    WHERE MONTH(TransactionDate) = month_val AND YEAR(TransactionDate) = year_val;
+
+    RETURN total;
+END;
+
+-- SELECT GetTotalAmountForMonthYear(7, 2024) AS TotalAmount;

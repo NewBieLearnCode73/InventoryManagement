@@ -5,6 +5,7 @@
 package dao;
 
 import database.JDBCUtil;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -211,8 +212,8 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             throw new RuntimeException(e);
         }
     }
-    
-    public boolean exportInvoice(ArrayList<Inventory> list){
+
+    public boolean exportInvoice(ArrayList<Inventory> list) {
 
         Connection con = null;
         PreparedStatement stmt = null;
@@ -230,12 +231,11 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             for (Inventory inventory : list) {
                 stmt.setInt(1, inventory.getInventoryID());
                 stmt.setInt(2, inventory.getQuantity());
-                stmt.addBatch(); 
+                stmt.addBatch();
             }
 
             stmt.executeBatch();
 
-            
             JDBCUtil.closeConnection(con);
 
             return true;
@@ -247,18 +247,97 @@ public class InventoryDAO implements DAOInterface<Inventory> {
 
             try {
                 if (con != null) {
-                    con.rollback(); 
+                    con.rollback();
                 }
             } catch (SQLException rollbackEx) {
                 System.err.println("Rollback Exception: " + rollbackEx.getMessage());
                 rollbackEx.printStackTrace();
             }
 
-            return false; 
+            return false;
 
         } finally {
             JDBCUtil.closeConnection(con);
         }
+    }
+
+    // Lấy tổng số lượng sản phẩm hiện có
+    public int getTotalOfInventory() {
+        int totalQuantity = 0;
+        try {
+            // Bước 1: Tạo kết nối
+            Connection con = JDBCUtil.getConnection();
+
+            // Bước 2: Thực thi câu lệnh SQL
+            String sql = "SELECT SUM(Quantity) AS total FROM Inventory;";
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            // Bước 3: Thực thi câu lệnh SQL và lấy kết quả
+            ResultSet rs = pst.executeQuery();
+
+            // Bước 4: Xử lý kết quả
+            if (rs.next()) {
+                totalQuantity = rs.getInt("total");
+            }
+
+            // Bước 5: Ngắt kết nối
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalQuantity;
+    }
+
+    // Lấy lợi nhuận thu được
+    public Double getProfit() {
+        Double totalProfit = 0.0;
+        try {
+            Connection con = JDBCUtil.getConnection();
+
+            String sql = "{CALL CalculateProfit(?)}";
+            CallableStatement cst = con.prepareCall(sql);
+
+            cst.registerOutParameter(1, java.sql.Types.DOUBLE);
+
+            cst.execute();
+
+            totalProfit = cst.getDouble(1);
+
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalProfit;
+    }
+    
+    // Tính tổng giá tiền đã mua vào các sản phẩm trong kho
+    public Double getPurchasing(){
+        Double totalPurchasing = 0.0;
+        try {
+            // Bước 1: Tạo kết nối
+            Connection con = JDBCUtil.getConnection();
+
+            // Bước 2: Thực thi câu lệnh SQL
+            String sql = "SELECT SUM(Inventory.PurchasingPrice * Inventory.Quantity) as TotalPurchasing From Inventory";
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            // Bước 3: Thực thi câu lệnh SQL và lấy kết quả
+            ResultSet rs = pst.executeQuery();
+
+            // Bước 4: Xử lý kết quả
+            if (rs.next()) {
+                totalPurchasing = rs.getDouble("TotalPurchasing");
+            }
+
+            // Bước 5: Ngắt kết nối
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalPurchasing;
     }
 
     @Override

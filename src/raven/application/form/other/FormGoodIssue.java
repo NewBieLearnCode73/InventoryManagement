@@ -122,11 +122,6 @@ public class FormGoodIssue extends javax.swing.JPanel {
 
         btnFind.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnFind.setText("Find");
-        btnFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFindActionPerformed(evt);
-            }
-        });
 
         btnBarcode.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnBarcode.setText("Scan Barcode");
@@ -391,10 +386,6 @@ public class FormGoodIssue extends javax.swing.JPanel {
                 .addGap(27, 27, 27))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFindActionPerformed
 
     private void jTextFieldFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldFindActionPerformed
         // TODO add your handling code here:
