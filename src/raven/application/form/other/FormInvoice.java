@@ -7,15 +7,18 @@ import dao.TransactionDetailsDAO;
 import helper.print.InvoicePayment;
 import helper.print.InvoiceReportField;
 import helper.print.PaymentManager;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.MouseListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.InvoiceDetail;
 import model.Transaction;
-import model.TransactionDetails;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.swing.JRViewer;
 import raven.toast.Notifications;
 
 /**
@@ -29,10 +32,10 @@ public class FormInvoice extends javax.swing.JPanel {
         loadTransaction();
         lb.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
-        
+
         MouseListener mouseListener = new InvoiceController(this);
         this.transactionTable.addMouseListener(mouseListener);
-        
+
         try {
             PaymentManager.getInstance().compileReport();
         } catch (Exception e) {
@@ -51,8 +54,7 @@ public class FormInvoice extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         transactionTable = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        labelInvoiceFile = new javax.swing.JLabel();
+        invoiceJPanel = new javax.swing.JPanel();
         btnExportInvoice = new javax.swing.JButton();
 
         lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -64,7 +66,7 @@ public class FormInvoice extends javax.swing.JPanel {
             new Object [][] {
             },
             new String [] {
-                "TransactionDate", "Quantity", "PriceAtTransaction", "TotalPrice", "ProductName", "ProductDescription"
+                "Barcode", "Quantity", "PriceAtTransaction", "TotalPrice", "ProductName", "ProductDescription"
             }
         ));
         jScrollPane2.setViewportView(invoiceDetailsTable);
@@ -82,7 +84,7 @@ public class FormInvoice extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
         );
 
@@ -109,29 +111,21 @@ public class FormInvoice extends javax.swing.JPanel {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Invoice", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
+        invoiceJPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Invoice", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        labelInvoiceFile.setText("Tạo hóa đơn trong thẻ jlabel này");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(labelInvoiceFile, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+        javax.swing.GroupLayout invoiceJPanelLayout = new javax.swing.GroupLayout(invoiceJPanel);
+        invoiceJPanel.setLayout(invoiceJPanelLayout);
+        invoiceJPanelLayout.setHorizontalGroup(
+            invoiceJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(labelInvoiceFile, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+        invoiceJPanelLayout.setVerticalGroup(
+            invoiceJPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         btnExportInvoice.setText("Export Invoice To File");
@@ -152,7 +146,7 @@ public class FormInvoice extends javax.swing.JPanel {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(66, 66, 66)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(invoiceJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnExportInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(72, 72, 72))
             .addComponent(lb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -169,41 +163,22 @@ public class FormInvoice extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(20, 20, 20))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
+                        .addComponent(invoiceJPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExportInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(50, Short.MAX_VALUE))))
+                        .addContainerGap(445, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExportInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportInvoiceActionPerformed
         try {
-            DefaultTableModel transactionTable = (DefaultTableModel) this.transactionTable.getModel();
-            
-            int row = this.transactionTable.getSelectedRow();
-            Integer transactionID = (Integer) transactionTable.getValueAt(row, 0);
-            LocalDateTime date = (LocalDateTime) transactionTable.getValueAt(row, 1);
-            Double totalPrice = (Double) transactionTable.getValueAt(row, 2);
-            
-            ArrayList<InvoiceDetail> list = TransactionDetailsDAO.getInstance().getListTransactionDetail(transactionID);
-            
-           ArrayList<InvoiceReportField> fields = new ArrayList<>();
-           for (InvoiceDetail i : list) {
-              InvoiceReportField tmp = new InvoiceReportField();
-              tmp.setName(i.getProducName());
-              tmp.setPrice(i.getPrice().toString());
-              tmp.setTotal(i.getTotalPrice().toString());
-              tmp.setQty(i.getQuantityl().toString());
-              
-              fields.add(tmp);
-           }
-            
-            InvoicePayment dataPrint = new InvoicePayment("Con cac", date.toString(), fields, totalPrice.intValue());
-            
+            InvoicePayment dataPrint = getInvoice();
+
             PaymentManager.getInstance().printInvoicePayment(dataPrint);
-        }
-        catch (Exception e) {
+        } catch (JRException e) {
             e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            JOptionPane.showMessageDialog(this, "Please choose a specific invoice", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportInvoiceActionPerformed
 
@@ -213,38 +188,107 @@ public class FormInvoice extends javax.swing.JPanel {
             DefaultTableModel transactionTableModel = (DefaultTableModel) this.transactionTable.getModel();
 
             transactionTableModel.setRowCount(0);
-            
+
             for (Transaction t : listTransaction) {
                 Object[] row = new Object[]{
                     t.getTransactionID(),
                     t.getTransactionDate(),
                     t.getTotalAmount()
                 };
-                
+
                 transactionTableModel.addRow(row);
             }
             this.transactionTable.setModel(transactionTableModel);
-            
+
             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
         } catch (Exception e) {
             System.out.println(e.toString());
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
         }
     }
-    
-    public void deleteInvoiceForm() {
-        
+
+    public void showInvoicePayment() {
+        try {
+            InvoicePayment data = getInvoice();
+            JasperPrint jasperPrint = PaymentManager.getInstance().showInvoicePayment(data);
+
+            if (jasperPrint != null) {
+                JRViewer jRViewer = new JRViewer(jasperPrint);
+
+                // Lấy kích thước của JasperPrint
+                int reportWidth = jasperPrint.getPageWidth();
+                int reportHeight = jasperPrint.getPageHeight();
+
+                // Thiết lập kích thước cho JRViewer
+                jRViewer.setPreferredSize(new Dimension(reportWidth, reportHeight));
+                jRViewer.setMinimumSize(new Dimension(reportWidth, reportHeight));
+                jRViewer.setMaximumSize(new Dimension(reportWidth, reportHeight));
+
+                // Kiểm tra xem invoiceJPanel có null không
+                if (this.invoiceJPanel != null) {
+                    this.invoiceJPanel.setLayout(new BorderLayout());
+
+                    // Xóa tất cả các thành phần hiện có trong invoiceJPanel
+                    this.invoiceJPanel.removeAll();
+
+                    // Cập nhật kích thước cho invoiceJPanel dựa trên kích thước của JasperPrint
+                    this.invoiceJPanel.setPreferredSize(new Dimension(reportWidth, reportHeight));
+                    this.invoiceJPanel.setMinimumSize(new Dimension(reportWidth, reportHeight));
+                    this.invoiceJPanel.setMaximumSize(new Dimension(reportWidth, reportHeight));
+
+                    // Thêm JRViewer vào invoiceJPanel
+                    this.invoiceJPanel.add(jRViewer, BorderLayout.CENTER);
+
+                    // Cập nhật lại kích thước và hiển thị cho invoiceJPanel
+                    this.invoiceJPanel.revalidate();
+                    this.invoiceJPanel.repaint();
+                } else {
+                    System.err.println("invoiceJPanel is null!");
+                }
+            } else {
+                System.err.println("jasperPrint is null!");
+            }
+        } catch (JRException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
+    private InvoicePayment getInvoice() {
+        DefaultTableModel transactionTable = (DefaultTableModel) this.transactionTable.getModel();
+
+        int row = this.transactionTable.getSelectedRow();
+        Integer transactionID = (Integer) transactionTable.getValueAt(row, 0);
+        LocalDateTime date = (LocalDateTime) transactionTable.getValueAt(row, 1);
+        Double totalPrice = (Double) transactionTable.getValueAt(row, 2);
+
+        ArrayList<InvoiceDetail> list = TransactionDetailsDAO.getInstance().getListTransactionDetail(transactionID);
+
+        ArrayList<InvoiceReportField> fields = new ArrayList<>();
+        for (InvoiceDetail i : list) {
+            InvoiceReportField tmp = new InvoiceReportField();
+            tmp.setName(i.getProducName());
+            tmp.setPrice(i.getPrice().toString());
+            tmp.setTotal(i.getTotalPrice().toString());
+            tmp.setQty(i.getQuantityl().toString());
+
+            fields.add(tmp);
+        }
+
+        InvoicePayment dataPrint = new InvoicePayment("Con cac", date.toString(), fields, totalPrice.intValue());
+
+        return dataPrint;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnExportInvoice;
     public javax.swing.JTable invoiceDetailsTable;
+    private javax.swing.JPanel invoiceJPanel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    public javax.swing.JLabel labelInvoiceFile;
     private javax.swing.JLabel lb;
     public javax.swing.JTable transactionTable;
     // End of variables declaration//GEN-END:variables

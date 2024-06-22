@@ -23,7 +23,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="0" width="186" height="30" uuid="0bb3b5a3-943e-4850-bbf5-a6312d04d421">
@@ -61,7 +61,7 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="26">
+		<band height="20">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="0" y="0" width="48" height="20" uuid="4c9aab1c-e946-4191-9309-61cb735b5241">
@@ -88,7 +88,7 @@
 					<bottomPen lineWidth="1.0" lineStyle="Dashed" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
@@ -122,7 +122,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="0" y="0" width="48" height="20" uuid="819cefe7-79b0-49e5-bf27-3c5820722aec">
@@ -146,6 +146,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -177,7 +178,7 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="21" splitType="Stretch">
+		<band height="90" splitType="Stretch">
 			<staticText>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="60" height="20" uuid="e8964961-81bc-415d-9193-edb179130917"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
@@ -185,9 +186,13 @@
 			</staticText>
 			<textField>
 				<reportElement positionType="FixRelativeToBottom" x="86" y="0" width="100" height="20" uuid="ca7fe71f-56da-4990-a45f-3ad5d1cdb54f"/>
-				<textElement textAlignment="Right"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="73" y="40" width="40" height="50" uuid="cb1ac427-3469-4040-9e7a-8876f2b24075"/>
+				<imageExpression><![CDATA["https://inanaz.com.vn/wp-content/uploads/2019/11/Tem-ch%E1%BB%A7-t%E1%BB%8Bch-H%E1%BB%93-Ch%C3%AD-Minh.jpg"]]></imageExpression>
+			</image>
 		</band>
 	</summary>
 </jasperReport>

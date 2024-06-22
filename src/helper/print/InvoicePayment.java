@@ -5,7 +5,6 @@
 package helper.print;
 
 import java.util.List;
-import model.InvoiceDetail;
 
 /**
  *

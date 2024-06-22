@@ -124,12 +124,13 @@ public class TransactionDetailsDAO implements DAOInterface<TransactionDetails> {
 
             while (rs.next()) {
                 InvoiceDetail invoiceDetail = new InvoiceDetail();
-                invoiceDetail.setDate(rs.getString("TransactionDate"));
+                invoiceDetail.setBarcode(rs.getString("barcode"));
                 invoiceDetail.setQuantityl(rs.getInt("Quantity"));
                 invoiceDetail.setPrice(rs.getInt("PriceAtTransaction"));
                 invoiceDetail.setTotalPrice(rs.getInt("TotalPrice"));
                 invoiceDetail.setProductDesciption(rs.getString("ProductDescription"));
                 invoiceDetail.setProducName(rs.getString("ProductName"));
+                invoiceDetail.setDate(rs.getString("TransactionDate"));
                 
                 list.add(invoiceDetail);
             }

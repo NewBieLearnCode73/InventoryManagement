@@ -9,7 +9,8 @@ package model;
  * @author acer
  */
 public class InvoiceDetail {
-
+    
+    private String barcode;
     private String date;
     private Integer quantityl;
     private Integer price;
@@ -17,7 +18,8 @@ public class InvoiceDetail {
     private String producName;
     private String productDesciption;
 
-    public InvoiceDetail(String date, Integer quantityl, Integer price, Integer totalPrice, String producName, String productDesciption) {
+    public InvoiceDetail(String barcode, String date, Integer quantityl, Integer price, Integer totalPrice, String producName, String productDesciption) {
+        this.barcode = barcode;
         this.date = date;
         this.quantityl = quantityl;
         this.price = price;
@@ -76,4 +78,14 @@ public class InvoiceDetail {
     public void setTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+    
+    
 }

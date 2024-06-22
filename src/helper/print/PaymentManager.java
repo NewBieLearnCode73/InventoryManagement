@@ -32,23 +32,29 @@ public class PaymentManager {
     }
 
     public void compileReport() throws JRException {
-       invoiceReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/helper/print/invoice.jrxml"));
+        invoiceReport = JasperCompileManager.compileReport(getClass().getResourceAsStream("/helper/print/invoice.jrxml"));
     }
 
+    //show invoice payment by JasperViewer
     public void printInvoicePayment(InvoicePayment data) throws JRException {
-        
+        JasperPrint print = showInvoicePayment(data);
+
+        view(print);
+    }
+
+    public JasperPrint showInvoicePayment(InvoicePayment data) throws JRException {
         //Parameters
         Map para = new HashMap();
         para.put("staff", data.getStaffName());
         para.put("total", data.getTotalPrice());
         para.put("date", data.getDate());
-        
+
         //Fields
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(data.getList());
 
         JasperPrint print = JasperFillManager.fillReport(invoiceReport, para, dataSource);
-        
-        view(print);
+
+        return print;
     }
 
     private void view(JasperPrint print) throws JRException {
