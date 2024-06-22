@@ -56,17 +56,19 @@ public class InvoiceController implements MouseListener {
 
             for (InvoiceDetail td : list) {
                 Object[] rowtd = new Object[]{
-                    td.getDate(),
+                    td.getBarcode(),
                     td.getQuantityl(),
                     td.getPrice(),
                     td.getTotalPrice(),
                     td.getProducName(),
-                    td.getProductDesciption()
+                    td.getProductDesciption(),
+                    td.getDate()
                 };
                 
                 invoiceDetailsTable.addRow(rowtd);
             }
             this.view.invoiceDetailsTable.setModel(invoiceDetailsTable);
+            this.view.showInvoicePayment();
         }
     }
 

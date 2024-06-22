@@ -18,7 +18,7 @@ public class JDBCUtil {
         try {
             // Đăng ký MySQL Driver với DriverManager
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3308/inventory_management?serverTimezone=UTC%2B7";
+            String url = "jdbc:mysql://localhost:3306/inventory_management?serverTimezone=UTC%2B7";
             String username = "root";
             String password = "root";
 
