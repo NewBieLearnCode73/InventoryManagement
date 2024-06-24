@@ -5,6 +5,7 @@
 package controller;
 
 import dao.UsersDAO;
+import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Action;
@@ -31,7 +32,7 @@ public class RegisterController implements Action {
 
         String username = this.view.txtUsername.getText().trim();
         String email = this.view.txtEmail.getText().trim();
-        String password = this.view.txtPassword.getText().trim();
+        String password = new String(this.view.txtPassword.getPassword());
 
         if (src.equals("Register")) {
 
@@ -39,12 +40,17 @@ public class RegisterController implements Action {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Vui lòng điền đầy đủ thông tin");
                 return;
             }
-            
+
+            if (!Validate.getInstance().isEmailValid(email)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Email không hợp lệ");
+                return;
+            }
+
             if (this.view.checkAccountIsExist(username, email)) {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản đã tồn tại");
             } else {
                 UsersDAO.getInstance().registerUser(username, email, password);
-                Application.navigateToMainScreen();
+                Application.navigateToLoginScreen();
                 Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng kí thành công");
             }
         }
