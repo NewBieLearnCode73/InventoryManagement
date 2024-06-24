@@ -35,6 +35,9 @@
   </Layout>
   <SubComponents>
     <Container class="raven.application.form.PanelLogin" name="panelLogin1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="LoginForm_panelLogin1"/>
+      </AuxValues>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lbTitle">
           <Properties>
@@ -73,6 +76,14 @@
             <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="LoginForm_cmdLogin"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="registerButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Register"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="registerButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

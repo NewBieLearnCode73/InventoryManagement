@@ -95,7 +95,7 @@ public class MainForm extends JLayeredPane {
                 Application.showForm(new FormInvoice());
             }
             else if (index == 4) {
-                Application.logout();
+                Application.navigateToLoginScreen();
             } else {
                 action.cancel();
             }
