@@ -53,6 +53,5 @@ public class RegisterModel {
         
         return usersDAO.checkAccountIsExist(username);
     }
-    
 }
     
