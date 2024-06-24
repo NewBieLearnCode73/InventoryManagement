@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import raven.application.form.LoginForm;
 import raven.application.form.MainForm;
+import raven.application.form.RegisterForm;
 import raven.swing.icon.GoogleMaterialDesignIcons;
 import raven.swing.icon.IconFontSwing;
 import raven.toast.Notifications;
@@ -25,8 +26,8 @@ public class Application extends javax.swing.JFrame {
     private static Application app;
     private final MainForm mainForm;
     private final LoginForm loginForm;
-    
-    
+    private final RegisterForm registerForm;
+
     public Application() {
         initComponents();
         setSize(new Dimension(1680, 768));
@@ -34,10 +35,13 @@ public class Application extends javax.swing.JFrame {
         setResizable(false);
         mainForm = new MainForm();
         loginForm = new LoginForm();
+
+        //TODO
+        registerForm = new RegisterForm();
         setContentPane(loginForm);
         getRootPane().putClientProperty(FlatClientProperties.FULL_WINDOW_CONTENT, true);
         Notifications.getInstance().setJFrame(this);
-        
+
         // Init Google icon font
         IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
     }
@@ -47,7 +51,7 @@ public class Application extends javax.swing.JFrame {
         app.mainForm.showForm(component);
     }
 
-    public static void login() {
+    public static void navigateToMainScreen() {
         FlatAnimatedLafChange.showSnapshot();
         app.setContentPane(app.mainForm);
         app.mainForm.applyComponentOrientation(app.getComponentOrientation());
@@ -57,7 +61,15 @@ public class Application extends javax.swing.JFrame {
         FlatAnimatedLafChange.hideSnapshotWithAnimation();
     }
 
-    public static void logout() {
+    public static void navigateToRegisterScreen() {
+        FlatAnimatedLafChange.showSnapshot();
+        app.setContentPane(app.registerForm);
+        app.loginForm.applyComponentOrientation(app.getComponentOrientation());
+        SwingUtilities.updateComponentTreeUI(app.registerForm);
+        FlatAnimatedLafChange.hideSnapshotWithAnimation();
+    }
+
+    public static void navigateToLoginScreen() {
         FlatAnimatedLafChange.showSnapshot();
         app.setContentPane(app.loginForm);
         app.loginForm.applyComponentOrientation(app.getComponentOrientation());
@@ -89,8 +101,6 @@ public class Application extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    
     public static void main(String args[]) {
         FlatRobotoFont.install();
         FlatLaf.registerCustomDefaultsSource("raven.theme");

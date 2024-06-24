@@ -4,49 +4,51 @@
  */
 package controller;
 
-import helper.preferencesManager.UserPreferences;
+import dao.UsersDAO;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
-import java.security.GeneralSecurityException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Action;
 import raven.application.Application;
-import raven.application.form.LoginForm;
+import raven.application.form.RegisterForm;
 import raven.toast.Notifications;
 
-public class LoginController implements Action {
+/**
+ *
+ * @author acer
+ */
+public class RegisterController implements Action {
 
-    public LoginForm view;
+    public RegisterForm view;
 
-    public LoginController(LoginForm view) {
-        super();
-        this.view = view;
+    public RegisterController(RegisterForm regiserForm) {
+        this.view = regiserForm;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        // Lấy tên nút
-        String source = e.getActionCommand();
-        String username = this.view.txtUser.getText().trim();
-        String password = new String(this.view.txtPass.getPassword());
+        String src = e.getActionCommand();
 
-        if (source.equals("Login")) {
-            if (this.view.authenticateUser(username, password)) {
-                // lưu vào preference
-                try {
-                    this.view.userPreferences.saveLogin(username, password);
-                } catch (GeneralSecurityException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        String username = this.view.txtUsername.getText().trim();
+        String email = this.view.txtEmail.getText().trim();
+        String password = this.view.txtPassword.getText().trim();
 
-                Application.navigateToMainScreen();
-                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng nhập thành công");
+        if (src.equals("Register")) {
+
+            if (username.isBlank() || email.isBlank() || password.isBlank()) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Vui lòng điền đầy đủ thông tin");
+                return;
+            }
+            
+            if (this.view.checkAccountIsExist(username, email)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản đã tồn tại");
             } else {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Đăng nhập thất bại");
+                UsersDAO.getInstance().registerUser(username, email, password);
+                Application.navigateToMainScreen();
+                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng kí thành công");
             }
         }
+
     }
 
     @Override

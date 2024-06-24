@@ -18,36 +18,36 @@ import raven.application.Application;
  * @author Raven
  */
 public class LoginForm extends javax.swing.JPanel {
+
     LoginModel model;
     LoginController action;
     public UserPreferences userPreferences = new UserPreferences();
 
-    
     public LoginForm() {
         initComponents();
         init();
-        
+
         model = new LoginModel(); // Khởi tạo model
         action = new LoginController(this); // Khởi tạo controller
-        
+
         cmdLogin.addActionListener(action);
-        
+
         ImageIcon icon = new ImageIcon("");
         JFrame frame = new JFrame();
         frame.setLayout(new FlowLayout());
         frame.setSize(1200, 800);
-        
+
         try {
             // kiểm tra preferences
             String[] loginPreferences = userPreferences.loadLogin();
-            if(loginPreferences != null) {
-                txtUser.setText(loginPreferences[0]);                
+            if (loginPreferences != null) {
+                txtUser.setText(loginPreferences[0]);
                 txtPass.setText(loginPreferences[1]);
             }
         } catch (GeneralSecurityException ex) {
             Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     private void init() {
@@ -55,7 +55,7 @@ public class LoginForm extends javax.swing.JPanel {
 
         lbTitle.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
-        
+
         txtPass.putClientProperty(FlatClientProperties.STYLE, ""
                 + "showRevealButton:true;"
                 + "showCapsLock:true");
@@ -77,6 +77,7 @@ public class LoginForm extends javax.swing.JPanel {
         lbPass = new javax.swing.JLabel();
         txtPass = new javax.swing.JPasswordField();
         cmdLogin = new javax.swing.JButton();
+        registerButton = new javax.swing.JButton();
 
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitle.setText("Login");
@@ -97,6 +98,14 @@ public class LoginForm extends javax.swing.JPanel {
             }
         });
         panelLogin1.add(cmdLogin);
+
+        registerButton.setText("Register");
+        registerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registerButtonActionPerformed(evt);
+            }
+        });
+        panelLogin1.add(registerButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -120,19 +129,24 @@ public class LoginForm extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmdLoginActionPerformed
 
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
+        Application.navigateToRegisterScreen();
+    }//GEN-LAST:event_registerButtonActionPerformed
+
     // Xác thực đăng nhập 
-	public boolean authenticateUser(String username, String password) {
-            this.model.setLoginUsername(username);
-            this.model.setLoginPassword(password);	
-            return this.model.authenticateUserModel();
-	}
-    
+    public boolean authenticateUser(String username, String password) {
+        this.model.setLoginUsername(username);
+        this.model.setLoginPassword(password);
+        return this.model.authenticateUserModel();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton cmdLogin;
     private javax.swing.JLabel lbPass;
     private javax.swing.JLabel lbTitle;
     private javax.swing.JLabel lbUser;
     private raven.application.form.PanelLogin panelLogin1;
+    private javax.swing.JButton registerButton;
     public javax.swing.JPasswordField txtPass;
     public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
