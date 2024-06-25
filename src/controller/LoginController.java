@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.UsersDAO;
+import database.SessionRole;
 import helper.preferencesManager.UserPreferences;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -41,8 +43,16 @@ public class LoginController implements Action {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                Application.navigateToMainScreen();
-                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng nhập thành công");
+                if ("Inactive".equals(UsersDAO.getInstance().getStatusByUsername(username))) {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản hiện đang bị khóa!");
+                } else if ("Active".equals(UsersDAO.getInstance().getStatusByUsername(username))) {
+                    SessionRole.setId(UsersDAO.getInstance().getIdByUsername(username));
+                    SessionRole.setStatus(UsersDAO.getInstance().getStatusByUsername(username));
+                    SessionRole.setRole(UsersDAO.getInstance().getRoleByUsername(username));
+
+                    Application.navigateToMainScreen();
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng nhập thành công");
+                }
             } else {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Đăng nhập thất bại");
             }

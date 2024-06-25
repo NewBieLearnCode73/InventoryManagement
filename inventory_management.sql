@@ -1,6 +1,6 @@
 SET time_zone = '+07:00';
 
-CREATE TABLE IF NOT EXISTS `Inventory` (
+CREATE TABLE `Inventory` (
   `InventoryID` int NOT NULL AUTO_INCREMENT,
   `Type` varchar(50) DEFAULT NULL,
   `Name` varchar(100) NOT NULL,
@@ -12,16 +12,16 @@ CREATE TABLE IF NOT EXISTS `Inventory` (
   `Barcode` int DEFAULT NULL,
   `Status` enum('Active','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Active',
   PRIMARY KEY (`InventoryID`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `Transactions` (
+CREATE TABLE `Transactions` (
   `TransactionID` int NOT NULL AUTO_INCREMENT,
   `TransactionDate` datetime NOT NULL,
   `TotalAmount` double DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `TransactionDetails` (
+CREATE TABLE `TransactionDetails` (
   `TransactionDetailID` int NOT NULL AUTO_INCREMENT,
   `TransactionID` int DEFAULT NULL,
   `InventoryID` int DEFAULT NULL,
@@ -33,15 +33,19 @@ CREATE TABLE IF NOT EXISTS `TransactionDetails` (
   KEY `FK_TransactionDetails_Inventory` (`InventoryID`),
   CONSTRAINT `FK_TransactionDetails_Inventory` FOREIGN KEY (`InventoryID`) REFERENCES `Inventory` (`InventoryID`),
   CONSTRAINT `FK_TransactionDetails_Transactions` FOREIGN KEY (`TransactionID`) REFERENCES `Transactions` (`TransactionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `Users` (
+CREATE TABLE `Users` (
   `UserID` int NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) NOT NULL,
-  `Password` varchar(50) NOT NULL,
+  `Password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `Email` varchar(50) DEFAULT NULL,
+  `Role` enum('ADMIN','USER') NOT NULL,
+  `Status` enum('Active','Inactive') DEFAULT NULL,
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Username` (`Username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+-- $2a$10$9bfwl7VV3UZTFiZc6SIKMegmO1FNz..gKPnv4E.PyX9CmPJiVQJ1i : admin
 
 # Trigger tự động tạo dữ liệu cho hóa đơn, và chi tiếc hóa đơn
 

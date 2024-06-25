@@ -32,6 +32,9 @@ public class Menu extends JPanel {
         {"Good Issue"},
         {"~Invoice~"},
         {"Invoice"},
+        {"~Management~"},
+        {"My Account"},
+        {"Admin control"},
         {"~Logout~"},
         {"Logout"},
     };
