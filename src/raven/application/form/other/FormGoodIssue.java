@@ -12,6 +12,8 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
 import model.Inventory;
+import raven.table.CustomTableCellRenderer;
+import raven.table.TableRenderer;
 import raven.toast.Notifications;
 
 /**
@@ -59,7 +61,12 @@ public class FormGoodIssue extends javax.swing.JPanel {
         
         // Xử lí click vào table cart
         this.inventoryCart.addMouseListener(mouseAction);
-       
+        
+        // Căn giữa chữ ở bản
+        TableRenderer inventoryTableRenderer = new TableRenderer(inventoryTable);
+        TableRenderer inventoryCartRenderer = new TableRenderer(inventoryCart);
+        inventoryTableRenderer.setAll();
+        inventoryCartRenderer.setAll();
     }
 
     @SuppressWarnings("unchecked")
@@ -102,7 +109,7 @@ public class FormGoodIssue extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Inventory", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15))); // NOI18N
 
-        inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
+        inventoryTable.setModel(new raven.table.NonEditableTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -113,6 +120,8 @@ public class FormGoodIssue extends javax.swing.JPanel {
                 "ID", "Barcode", "Type", "Name", "Selling Price", "Quantity", "Image"
             }
         ));
+        inventoryTable.setRowHeight(40);
+        inventoryTable.setShowGrid(false);
         jScrollPane1.setViewportView(inventoryTable);
 
         jTextFieldFind.addActionListener(new java.awt.event.ActionListener() {
@@ -163,16 +172,13 @@ public class FormGoodIssue extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cart", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 15))); // NOI18N
 
-        inventoryCart.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
+        inventoryCart.setModel(new raven.table.NonEditableTableModel(
+            new Object [][] { },
             new String [] {
                 "ID", "Barcode", "Type", "Name", "Selling Price", "Quantity", "Image"
             }
         ));
+        inventoryCart.setRowHeight(40);
         jScrollPane2.setViewportView(inventoryCart);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -482,6 +488,8 @@ public class FormGoodIssue extends javax.swing.JPanel {
                 tableModel.addRow(row);
                 }
             }
+            
+                    
 
             this.inventoryTable.setModel(tableModel);
             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");

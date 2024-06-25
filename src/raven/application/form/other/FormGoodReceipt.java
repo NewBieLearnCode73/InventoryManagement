@@ -14,6 +14,9 @@ import javax.swing.table.DefaultTableModel;
 
 import model.Inventory;
 import model.InventoryType;
+import raven.table.CustomHeaderRenderer;
+import raven.table.CustomTableCellRenderer;
+import raven.table.TableRenderer;
 import raven.toast.Notifications;
 /**
  *
@@ -61,6 +64,10 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         MouseListener mouseAction = new GoodReciptController(this);
         inventoryTable.addMouseListener(mouseAction);
         
+        // xử lí giao diện bảng
+        TableRenderer inventoryTableRenderer = new TableRenderer(inventoryTable);
+        inventoryTableRenderer.setAll();
+
         // Xử lí nhập 
         KeyListener keyAction;
         keyAction = new GoodReciptController(this);
@@ -367,7 +374,7 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Inventories", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
         inventoryTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        inventoryTable.setModel(new javax.swing.table.DefaultTableModel(
+        inventoryTable.setModel(new raven.table.NonEditableTableModel(
             new Object [][] {
             },
             new String [] {
@@ -375,6 +382,7 @@ public class FormGoodReceipt extends javax.swing.JPanel {
             }
         ));
         inventoryTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        inventoryTable.setRowHeight(40);
         jScrollPane3.setViewportView(inventoryTable);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);

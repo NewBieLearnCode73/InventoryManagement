@@ -19,6 +19,8 @@ import model.Transaction;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.swing.JRViewer;
+import raven.table.CustomTableCellRenderer;
+import raven.table.TableRenderer;
 import raven.toast.Notifications;
 
 /**
@@ -35,12 +37,23 @@ public class FormInvoice extends javax.swing.JPanel {
 
         MouseListener mouseListener = new InvoiceController(this);
         this.transactionTable.addMouseListener(mouseListener);
-
+        
         try {
             PaymentManager.getInstance().compileReport();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        
+        // 
+        CustomTableCellRenderer renderer = new CustomTableCellRenderer("#3a4045", "#53575b");
+        this.transactionTable.setDefaultRenderer(Object.class, renderer);
+        this.invoiceDetailsTable.setDefaultRenderer(Object.class, renderer);
+        
+        TableRenderer transactionTableRenderer = new TableRenderer(transactionTable);        
+        TableRenderer invoiceDetailsTableRenderer = new TableRenderer(invoiceDetailsTable);
+        transactionTableRenderer.setAll();
+        invoiceDetailsTableRenderer.setAll();
     }
 
     @SuppressWarnings("unchecked")
@@ -62,13 +75,14 @@ public class FormInvoice extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Invoice Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        invoiceDetailsTable.setModel(new javax.swing.table.DefaultTableModel(
+        invoiceDetailsTable.setModel(new raven.table.NonEditableTableModel(
             new Object [][] {
             },
             new String [] {
                 "Barcode", "Quantity", "PriceAtTransaction", "TotalPrice", "ProductName", "ProductDescription"
             }
         ));
+        invoiceDetailsTable.setRowHeight(40);
         jScrollPane2.setViewportView(invoiceDetailsTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -90,13 +104,14 @@ public class FormInvoice extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Transactions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 
-        transactionTable.setModel(new javax.swing.table.DefaultTableModel(
+        transactionTable.setModel(new raven.table.NonEditableTableModel(
             new Object [][] {
             },
             new String [] {
                 "TransactionID", "TransactionDate", "TotalAmount"
             }
         ));
+        transactionTable.setRowHeight(40);
         jScrollPane1.setViewportView(transactionTable);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
