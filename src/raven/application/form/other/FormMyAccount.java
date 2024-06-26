@@ -17,12 +17,12 @@ public class FormMyAccount extends javax.swing.JPanel {
         initComponents();
         lb.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
-        
+        this.tempUserID.setVisible(false);
         Users temptUser = new Users();
         
         temptUser = UsersDAO.getInstance().getById(SessionRole.getId());
         
-        jTextFieldUsername.setText(temptUser.getUsername());
+        jTextFieldUsername.setText(temptUser.getUsername()); 
         jTextFieldEmail.setText(temptUser.getEmail());
         jTextFieldRole.setText(temptUser.getRole());
         jTextFieldStatus.setText(temptUser.getStatus());
