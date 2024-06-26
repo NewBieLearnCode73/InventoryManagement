@@ -1,6 +1,7 @@
 package controller;
 
 import dao.InventoryDAO;
+import helper.globalVariables.CartInventory;
 import static helper.processImage.processImage.getImage;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -8,7 +9,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
@@ -22,7 +22,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
 
     public FormGoodIssue view;
     // Lưu số lượng đơn hàng
-    public ArrayList<Inventory> listInventorys = new ArrayList<>();
+//    public ArrayList<Inventory> listInventorys = new ArrayList<>();
 
     public GoodIssueController(FormGoodIssue view) {
         this.view = view;
@@ -36,7 +36,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             tableModel.setRowCount(0);
 
             //         "ID", "Barcode", "Type", "Name", "Price", "Quantity", "Image"
-            for (Inventory inventory : listInventorys) {
+            for (Inventory inventory : CartInventory.listInventorys) {
                 Object[] row = new Object[]{
                     inventory.getInventoryID(),
                     inventory.getBarcode(),
@@ -96,19 +96,19 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
 
                         // Kiểm tra xem bên trong list có tồn tại Inventory có trùng ID với inventory vừa thêm vào hay không
                         boolean found = false;
-                        for (Inventory listInventory : listInventorys) {
+                        for (Inventory listInventory : CartInventory.listInventorys) {
                             if (listInventory.getInventoryID() == tempInventory.getInventoryID()) {
-                                listInventory.setQuantity(tempInventory.getQuantity());
+                                listInventory.setQuantity(tempInventory.getQuantity() + listInventory.getQuantity());
                                 found = true;
                                 break;
                             }
                         }
                         if (!found) {
-                            listInventorys.add(tempInventory);
+                            CartInventory.listInventorys.add(tempInventory);
                         }
 
                         // In danh sách Inventory
-                        for (Inventory listInventory : listInventorys) {
+                        for (Inventory listInventory : CartInventory.listInventorys) {
                             System.out.println(listInventory.toString());
                         }
 
@@ -128,7 +128,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
         }
         // Xóa toàn bộ giỏ hàng hiện tại
         if (src.equals("Reset cart")){
-            listInventorys.clear();
+            CartInventory.listInventorys.clear();
             this.LoadCart();
         }
         // Xóa 1 phần tử khỏi cart
@@ -138,9 +138,9 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             DefaultTableModel model = (DefaultTableModel) this.view.inventoryCart.getModel();
             int inventoryIDToDelete = (int) model.getValueAt(selectedRow, 0); 
 
-            for (int i = 0; i < listInventorys.size(); i++) {
-                if (listInventorys.get(i).getInventoryID() == inventoryIDToDelete) {
-                    listInventorys.remove(i);
+            for (int i = 0; i < CartInventory.listInventorys.size(); i++) {
+                if (CartInventory.listInventorys.get(i).getInventoryID() == inventoryIDToDelete) {
+                   CartInventory.listInventorys.remove(i);
                     break; 
                 }
             }
@@ -159,16 +159,16 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
         
         // Xuất hóa đơn
         if (src.equals("Export invoice")) {
-            if (!listInventorys.isEmpty()) {
+            if (!CartInventory.listInventorys.isEmpty()) {
                 // Prompt confirmation before exporting
                 int dialogResult = JOptionPane.showConfirmDialog(this.view, "Are you sure you want to export the invoice?", "Confirmation", JOptionPane.YES_NO_OPTION);
                 
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    boolean exportInvoice = InventoryDAO.getInstance().exportInvoice(listInventorys);
+                    boolean exportInvoice = InventoryDAO.getInstance().exportInvoice(CartInventory.listInventorys);
                     
                     if (exportInvoice) {
                         this.view.Load();
-                        listInventorys.clear();
+                        CartInventory.listInventorys.clear();
                         this.LoadCart();
                         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Export Invoice Successfully!");
                     } else {

@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import controller.GoodIssueController;
 import dao.InventoryDAO;
 import helper.barcodeScaner.BarcodeScannerTask;
+import helper.globalVariables.CartInventory;
 import java.awt.Color;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -12,7 +13,6 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
 import model.Inventory;
-import raven.table.CustomTableCellRenderer;
 import raven.table.TableRenderer;
 import raven.toast.Notifications;
 
@@ -298,7 +298,7 @@ public class FormGoodIssue extends javax.swing.JPanel {
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(inventoryImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(30, 30, 30)))
@@ -382,7 +382,7 @@ public class FormGoodIssue extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(26, 26, 26))
-            .addComponent(lb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lb, javax.swing.GroupLayout.DEFAULT_SIZE, 1376, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,6 +493,29 @@ public class FormGoodIssue extends javax.swing.JPanel {
 
             this.inventoryTable.setModel(tableModel);
             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
+            
+            
+            
+            // load vô cái cart
+          DefaultTableModel cartTableModel = (DefaultTableModel) this.inventoryCart.getModel();
+
+            cartTableModel.setRowCount(0);
+
+            //         "ID", "Barcode", "Type", "Name", "Price", "Quantity", "Image"
+            for (Inventory inventory : CartInventory.listInventorys) {
+                Object[] row = new Object[]{
+                    inventory.getInventoryID(),
+                    inventory.getBarcode(),
+                    inventory.getType(),
+                    inventory.getName(),
+                    inventory.getSellingPrice(),
+                    inventory.getQuantity(),
+                    inventory.getImage()
+                };
+                cartTableModel.addRow(row);
+            }
+
+            this.inventoryCart.setModel(cartTableModel);
         } catch (Exception ex) {
 
             // Thả lỗi ra ngoài

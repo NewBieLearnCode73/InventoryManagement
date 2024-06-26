@@ -16,6 +16,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import raven.application.Application;
+import raven.application.form.other.CartForm;
 import raven.application.form.other.FormDashboard;
 import raven.application.form.other.FormGoodReceipt;
 import raven.application.form.other.FormGoodIssue;
@@ -91,10 +92,13 @@ public class MainForm extends JLayeredPane {
             else if(index == 2){
                 Application.showForm(new FormGoodIssue());
             }
-            else if(index == 3){
+           else if(index == 3){
+                Application.showForm(new CartForm());
+            }
+            else if(index == 4){
                 Application.showForm(new FormInvoice());
             }
-            else if (index == 4) {
+            else if (index == 5) {
                 Application.navigateToLoginScreen();
             } else {
                 action.cancel();
