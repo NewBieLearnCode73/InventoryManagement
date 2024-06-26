@@ -4,7 +4,9 @@
  */
 package controller;
 
-import helper.preferencesManager.UserPreferences;
+import dao.UsersDAO;
+import database.SessionRole;
+import helper.util.Constant;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.security.GeneralSecurityException;
@@ -41,10 +43,19 @@ public class LoginController implements Action {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                Application.navigateToMainScreen();
-                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng nhập thành công");
+                if ("Inactive".equals(UsersDAO.getInstance().getStatusByUsername(username))) {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.ACCOUNT_LOCKED);
+                } else if ("Active".equals(UsersDAO.getInstance().getStatusByUsername(username))) {
+                    SessionRole.setUsername(username);
+                    SessionRole.setId(UsersDAO.getInstance().getIdByUsername(username));
+                    SessionRole.setStatus(UsersDAO.getInstance().getStatusByUsername(username));
+                    SessionRole.setRole(UsersDAO.getInstance().getRoleByUsername(username));
+
+                    Application.navigateToMainScreen();
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, Constant.LOGIN_SUCCESS);
+                }
             } else {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Đăng nhập thất bại");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.LOGIN_FAILED);
             }
         }
     }

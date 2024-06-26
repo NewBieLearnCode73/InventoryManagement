@@ -5,11 +5,11 @@
 package controller;
 
 import dao.UsersDAO;
+import helper.util.Constant;
 import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Action;
-import raven.application.Application;
 import raven.application.form.RegisterForm;
 import raven.toast.Notifications;
 
@@ -33,28 +33,36 @@ public class RegisterController implements Action {
         String username = this.view.txtUsername.getText().trim();
         String email = this.view.txtEmail.getText().trim();
         String password = new String(this.view.txtPassword.getPassword());
+        String role = this.view.roleComboBox.getSelectedItem().toString();
 
         if (src.equals("Register")) {
 
             if (username.isBlank() || email.isBlank() || password.isBlank()) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Vui lòng điền đầy đủ thông tin");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.FORM_NOT_FILL);
                 return;
             }
 
             if (!Validate.getInstance().isEmailValid(email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Email không hợp lệ");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.VALIDATE_EMAIL_ERROR);
                 return;
             }
-
-            if (this.view.checkAccountIsExist(username, email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản đã tồn tại");
-            } else {
-                UsersDAO.getInstance().registerUser(username, email, password);
-                Application.navigateToLoginScreen();
-                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng kí thành công");
+            
+            if (!Validate.getInstance().isPasswordValid(password)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.VALIDATE_PASSWORD_ERROR);
+                return;
             }
-        }
+            
+            
+            if (this.view.checkAccountIsExist(username, email)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.ACCOUNT_EXIST);
+                return;
+            }
+            
+            UsersDAO.getInstance().registerUser(username, email, password, role);
+            this.view.resetForm();
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, Constant.SUCCESS_REGISTER);
 
+        }
     }
 
     @Override

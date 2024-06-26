@@ -33,6 +33,10 @@ public class Menu extends JPanel {
         {"Cart"},
         {"~Invoice~"},
         {"Invoice"},
+        {"~Management~"},
+        {"My Account"},
+        {"Admin control"},
+        {"Create account"},
         {"~Logout~"},
         {"Logout"},
     };

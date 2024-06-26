@@ -209,6 +209,11 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         jScrollPane1.setViewportView(inventoryDescription);
 
         inventoryComboBoxType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { }));
+        inventoryComboBoxType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inventoryComboBoxTypeActionPerformed(evt);
+            }
+        });
 
         inventoryQuantity.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         inventoryQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -475,6 +480,10 @@ public class FormGoodReceipt extends javax.swing.JPanel {
         Thread scannerThread = new Thread(new BarcodeScannerTask( inventoryBarcode));
         scannerThread.start();
     }//GEN-LAST:event_barcodeBtnActionPerformed
+
+    private void inventoryComboBoxTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventoryComboBoxTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inventoryComboBoxTypeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton barcodeBtn;

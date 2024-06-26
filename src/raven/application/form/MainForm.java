@@ -3,6 +3,7 @@ package raven.application.form;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
+import database.SessionRole;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -12,15 +13,19 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import raven.application.Application;
 import raven.application.form.other.CartForm;
+import raven.application.form.other.FormAdminControl;
 import raven.application.form.other.FormDashboard;
 import raven.application.form.other.FormGoodReceipt;
 import raven.application.form.other.FormGoodIssue;
 import raven.application.form.other.FormInvoice;
+import raven.application.form.other.FormMyAccount;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -74,8 +79,7 @@ public class MainForm extends JLayeredPane {
             // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
             if (index == 0) {
                 Application.showForm(new FormDashboard());
-            } 
-            else if (index == 1) {
+            } else if (index == 1) {
 //                if (subIndex == 1) {
 //                    Application.showForm(new FormGoodReceipt());
 //                } else if (subIndex == 2) {
@@ -88,17 +92,28 @@ public class MainForm extends JLayeredPane {
 //                    action.cancel();
 //                }
                 Application.showForm(new FormGoodReceipt());
-            } 
-            else if(index == 2){
+            } else if (index == 2) {
                 Application.showForm(new FormGoodIssue());
-            }
-           else if(index == 3){
-                Application.showForm(new CartForm());
-            }
-            else if(index == 4){
+            } else if (index == 3) {
                 Application.showForm(new FormInvoice());
-            }
-            else if (index == 5) {
+            } else if (index == 4) {
+                Application.showForm(new FormMyAccount());
+            } else if (index == 5) {
+                if ("ADMIN".equals(SessionRole.getRole())) {
+                    Application.showForm(new FormAdminControl());
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (index == 6) {
+                if ("ADMIN".equals(SessionRole.getRole())) {
+                    Application.showForm(new RegisterForm());
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (index == 7) {
+                SessionRole.resetSession(); // Xóa bỏ session
                 Application.navigateToLoginScreen();
             } else {
                 action.cancel();

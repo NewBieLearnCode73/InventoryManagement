@@ -94,6 +94,7 @@ public class TransactionDAO implements DAOInterface<Transaction> {
             while (rs.next()) {
                 Transaction transaction = new Transaction();
                 transaction.setTransactionID(rs.getInt("TransactionID"));
+                transaction.setUserID(rs.getInt("UserID"));
                 transaction.setTransactionDate(rs.getTimestamp("TransactionDate").toLocalDateTime());
                 transaction.setTotalAmount(rs.getDouble("TotalAmount"));
                 list.add(transaction);
