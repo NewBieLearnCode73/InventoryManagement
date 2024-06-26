@@ -2,6 +2,7 @@ package controller;
 
 import dao.InventoryDAO;
 import static helper.processImage.processImage.getImage;
+import helper.util.Constant;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -50,10 +51,10 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             }
 
             this.view.inventoryCart.setModel(tableModel);
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Cart");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_CART);
         } catch (Exception ex) {
             System.out.println(ex.toString());
-            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Cart");
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_CART_ERROR);
         }
     }
 
@@ -74,8 +75,8 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
                 int quantity = (int) this.view.inventoryQuantity.getValue();
                 if (quantity != 0) {
 
-                Inventory freeTempInventory = InventoryDAO.getInstance().getById(Integer.parseInt(this.view.inventoryId.getText()));
-                    
+                    Inventory freeTempInventory = InventoryDAO.getInstance().getById(Integer.parseInt(this.view.inventoryId.getText()));
+
                     // Kiểm tra giá trị của quantity
                     int availableQuantity = freeTempInventory.getQuantity();
                     if (quantity > 0 && quantity <= availableQuantity) {
@@ -127,28 +128,28 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             }
         }
         // Xóa toàn bộ giỏ hàng hiện tại
-        if (src.equals("Reset cart")){
+        if (src.equals("Reset cart")) {
             listInventorys.clear();
             this.LoadCart();
         }
         // Xóa 1 phần tử khỏi cart
         if (src.equals("Delete from cart")) {
-        int selectedRow = this.view.inventoryCart.getSelectedRow();
-        if (selectedRow != -1) { 
-            DefaultTableModel model = (DefaultTableModel) this.view.inventoryCart.getModel();
-            int inventoryIDToDelete = (int) model.getValueAt(selectedRow, 0); 
+            int selectedRow = this.view.inventoryCart.getSelectedRow();
+            if (selectedRow != -1) {
+                DefaultTableModel model = (DefaultTableModel) this.view.inventoryCart.getModel();
+                int inventoryIDToDelete = (int) model.getValueAt(selectedRow, 0);
 
-            for (int i = 0; i < listInventorys.size(); i++) {
-                if (listInventorys.get(i).getInventoryID() == inventoryIDToDelete) {
-                    listInventorys.remove(i);
-                    break; 
+                for (int i = 0; i < listInventorys.size(); i++) {
+                    if (listInventorys.get(i).getInventoryID() == inventoryIDToDelete) {
+                        listInventorys.remove(i);
+                        break;
+                    }
                 }
-            }
 
-            this.LoadCart();
+                this.LoadCart();
+            }
         }
-    }
-        
+
         // Sự kiện tìm kiếm trong bảng inventory
         if (src.equals("Find")) {
             DefaultTableModel obj = (DefaultTableModel) this.view.inventoryTable.getModel();
@@ -156,16 +157,16 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             this.view.inventoryTable.setRowSorter(obj1);
             obj1.setRowFilter(RowFilter.regexFilter(this.view.jTextFieldFind.getText()));
         }
-        
+
         // Xuất hóa đơn
         if (src.equals("Export invoice")) {
             if (!listInventorys.isEmpty()) {
                 // Prompt confirmation before exporting
                 int dialogResult = JOptionPane.showConfirmDialog(this.view, "Are you sure you want to export the invoice?", "Confirmation", JOptionPane.YES_NO_OPTION);
-                
+
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     boolean exportInvoice = InventoryDAO.getInstance().exportInvoice(listInventorys);
-                    
+
                     if (exportInvoice) {
                         this.view.Load();
                         listInventorys.clear();
@@ -175,10 +176,9 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
                         Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Export Invoice Error!");
                     }
                 } else {
-                    
                     System.out.println("Export invoice canceled by user.");
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this.view, "Please select at least one product", "Warning", JOptionPane.WARNING_MESSAGE);
             }

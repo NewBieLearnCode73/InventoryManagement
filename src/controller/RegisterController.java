@@ -5,6 +5,7 @@
 package controller;
 
 import dao.UsersDAO;
+import helper.util.Constant;
 import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
@@ -37,29 +38,29 @@ public class RegisterController implements Action {
         if (src.equals("Register")) {
 
             if (username.isBlank() || email.isBlank() || password.isBlank()) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Please fill all information");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.FORM_NOT_FILL);
                 return;
             }
 
             if (!Validate.getInstance().isEmailValid(email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Email does not match");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.VALIDATE_EMAIL_ERROR);
                 return;
             }
             
             if (!Validate.getInstance().isPasswordValid(password)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Password must contain at least 1 special character, 1 number, 1 capital letter and must be 6 characters or more.");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.VALIDATE_PASSWORD_ERROR);
                 return;
             }
             
             
             if (this.view.checkAccountIsExist(username, email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Account is existed");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, Constant.ACCOUNT_EXIST);
                 return;
             }
             
             UsersDAO.getInstance().registerUser(username, email, password, role);
             this.view.resetForm();
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Register successful");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, Constant.SUCCESS_REGISTER);
 
         }
     }

@@ -6,6 +6,7 @@ package controller;
 
 import dao.UsersDAO;
 import helper.BCrypt.BcryptHash;
+import helper.util.Constant;
 import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -44,14 +45,14 @@ public class MyAccountController implements Action, MouseListener, KeyListener {
                     this.tempUser.setUserID(Integer.parseInt(this.view.tempUserID.getText()));
 
                     UsersDAO.getInstance().update(tempUser);
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Changing Information Successfully!");
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, Constant.SUCCESS_CHANGE_INFORMATION);
                     Application.showForm(new FormMyAccount());
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Password must contain at least 1 special character, 1 number, 1 capital letter and must be 6 characters or more.");
+                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, Constant.VALIDATE_PASSWORD_ERROR);
                 }
 
             } else {
-                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Email not valid please try again!");
+                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, Constant.VALIDATE_EMAIL_ERROR);
 
             }
         }

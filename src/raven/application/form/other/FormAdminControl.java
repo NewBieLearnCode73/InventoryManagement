@@ -18,6 +18,8 @@ import raven.cell.TableActionCellRender;
 import raven.cell.TableActionEvent;
 import raven.toast.Notifications;
 import helper.BCrypt.BcryptHash;
+import helper.util.Constant;
+import helper.util.Validate;
 
 /**
  *
@@ -47,9 +49,11 @@ public class FormAdminControl extends javax.swing.JPanel {
             public void onLock(int row) {
                 IDtempt.setText(model.getValueAt(row, 0).toString());
                 String input = JOptionPane.showInputDialog("Enter new password for this user: ");
-                if (input != null && !"".equals(input.trim())) {
+                if (Validate.getInstance().isPasswordValid(input)) {
                     UsersDAO.getInstance().changePassword(Integer.parseInt(IDtempt.getText()), BcryptHash.hashPassword(input));
                     Load();
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, Constant.VALIDATE_PASSWORD_ERROR);
                 }
             }
 
@@ -67,7 +71,6 @@ public class FormAdminControl extends javax.swing.JPanel {
                     UsersDAO.getInstance().changeRole(Integer.parseInt(IDtempt.getText()), input);
                     Load();
                 }
-                
             }
 
             // Active User 
@@ -77,14 +80,14 @@ public class FormAdminControl extends javax.swing.JPanel {
 
                 String[] choices = {"Active", "Inactive"};
                 String input = (String) JOptionPane.showInputDialog(null, "Active or Inactive for this user?",
-                        "Chossing status for user", JOptionPane.QUESTION_MESSAGE, null, // Use
+                        "Choosing status for user", JOptionPane.QUESTION_MESSAGE, null, // Use
                         // default
                         // icon
                         choices, // Array of choices
                         choices[0]); // Initial choice
                 if (input != null && !"".equals(input.trim())) {
-                     UsersDAO.getInstance().changeStatus(Integer.parseInt(IDtempt.getText()), input);
-                     Load();
+                    UsersDAO.getInstance().changeStatus(Integer.parseInt(IDtempt.getText()), input);
+                    Load();
                 }
             }
 
@@ -119,12 +122,12 @@ public class FormAdminControl extends javax.swing.JPanel {
             }
 
             this.jTableUsers.setModel(tableModel);
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_DATABSE_SUCCESS);
         } catch (Exception ex) {
 
             // Thả lỗi ra ngoài
             System.out.println(ex.toString());
-            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_DATABASE_ERROR);
         }
     }
 

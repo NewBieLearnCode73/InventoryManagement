@@ -11,15 +11,25 @@ import java.time.LocalDateTime;
 
 public class Transaction {
     private int transactionID;
+    private int userID;
     private LocalDateTime transactionDate;
     private double totalAmount;
 
     public Transaction() {}
 
-    public Transaction(int transactionID, LocalDateTime transactionDate, double totalAmount) {
+    public Transaction(int transactionID, int userID, LocalDateTime transactionDate, double totalAmount) {
         this.transactionID = transactionID;
         this.transactionDate = transactionDate;
         this.totalAmount = totalAmount;
+        this.userID = userID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public int getTransactionID() {
