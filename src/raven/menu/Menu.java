@@ -35,6 +35,7 @@ public class Menu extends JPanel {
         {"~Management~"},
         {"My Account"},
         {"Admin control"},
+        {"Create account"},
         {"~Logout~"},
         {"Logout"},
     };

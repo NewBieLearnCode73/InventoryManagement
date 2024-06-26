@@ -29,10 +29,14 @@ public class FormMyAccount extends javax.swing.JPanel {
         
         int userID = temptUser.getUserID();
         tempUserID.setText(String.valueOf(userID));
+        
+        jPasswordField.putClientProperty(FlatClientProperties.STYLE, ""
+                + "showRevealButton:true;"
+                + "showCapsLock:true");
 
         
         jTextFieldUsername.setEnabled(false);
-        jTextFieldPassword.setEnabled(true);
+        jPasswordField.setEnabled(true);
         jTextFieldEmail.setEnabled(true);
         jTextFieldRole.setEnabled(false);
         jTextFieldStatus.setEnabled(false);
@@ -52,7 +56,6 @@ public class FormMyAccount extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextFieldPassword = new javax.swing.JTextField();
         jTextFieldRole = new javax.swing.JTextField();
         jTextFieldEmail = new javax.swing.JTextField();
         jTextFieldStatus = new javax.swing.JTextField();
@@ -61,6 +64,7 @@ public class FormMyAccount extends javax.swing.JPanel {
         btnChangeInfo = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         tempUserID = new javax.swing.JLabel();
+        jPasswordField = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -68,25 +72,19 @@ public class FormMyAccount extends javax.swing.JPanel {
         lb.setText("My Account");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Username :");
+        jLabel1.setText("Username ");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Email :");
+        jLabel2.setText("Email ");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Password :");
+        jLabel3.setText("Password ");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Role :");
+        jLabel4.setText("Role ");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("Status :");
-
-        jTextFieldPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldPasswordActionPerformed(evt);
-            }
-        });
+        jLabel5.setText("Status");
 
         jTextFieldRole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +102,11 @@ public class FormMyAccount extends javax.swing.JPanel {
 
         jButton2.setText("Reset");
         jButton2.setPreferredSize(new java.awt.Dimension(72, 33));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         tempUserID.setText("jLabel7");
 
@@ -133,9 +136,9 @@ public class FormMyAccount extends javax.swing.JPanel {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextFieldStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                                     .addComponent(jTextFieldRole, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                                     .addComponent(jTextFieldEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                                    .addComponent(jTextFieldUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))))
+                                    .addComponent(jTextFieldUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                                    .addComponent(jPasswordField))))
                         .addGap(35, 35, 35))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,15 +148,11 @@ public class FormMyAccount extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextFieldUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jTextFieldPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
@@ -235,13 +234,13 @@ public class FormMyAccount extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnChangeInfoActionPerformed
 
-    private void jTextFieldPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldPasswordActionPerformed
-
     private void jTextFieldRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldRoleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldRoleActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangeInfo;
@@ -254,9 +253,9 @@ public class FormMyAccount extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    public javax.swing.JPasswordField jPasswordField;
     private javax.swing.JSeparator jSeparator1;
     public javax.swing.JTextField jTextFieldEmail;
-    public javax.swing.JTextField jTextFieldPassword;
     public javax.swing.JTextField jTextFieldRole;
     public javax.swing.JTextField jTextFieldStatus;
     public javax.swing.JTextField jTextFieldUsername;

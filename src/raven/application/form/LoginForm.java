@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import model.LoginModel;
 import net.miginfocom.swing.MigLayout;
-import raven.application.Application;
+
 
 /**
  *
@@ -77,7 +77,6 @@ public class LoginForm extends javax.swing.JPanel {
         lbPass = new javax.swing.JLabel();
         txtPass = new javax.swing.JPasswordField();
         cmdLogin = new javax.swing.JButton();
-        registerButton = new javax.swing.JButton();
 
         lbTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbTitle.setText("Login");
@@ -98,14 +97,6 @@ public class LoginForm extends javax.swing.JPanel {
             }
         });
         panelLogin1.add(cmdLogin);
-
-        registerButton.setText("Register");
-        registerButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerButtonActionPerformed(evt);
-            }
-        });
-        panelLogin1.add(registerButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -129,10 +120,6 @@ public class LoginForm extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmdLoginActionPerformed
 
-    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
-        Application.navigateToRegisterScreen();
-    }//GEN-LAST:event_registerButtonActionPerformed
-
     // Xác thực đăng nhập 
     public boolean authenticateUser(String username, String password) {
         this.model.setLoginUsername(username);
@@ -146,7 +133,6 @@ public class LoginForm extends javax.swing.JPanel {
     private javax.swing.JLabel lbTitle;
     private javax.swing.JLabel lbUser;
     private raven.application.form.PanelLogin panelLogin1;
-    private javax.swing.JButton registerButton;
     public javax.swing.JPasswordField txtPass;
     public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables

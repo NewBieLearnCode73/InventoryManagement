@@ -31,14 +31,13 @@ public class MyAccountController implements Action, MouseListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String source = e.getActionCommand();
-
+        String password = new String(this.view.jPasswordField.getPassword());
         if (source.equals("Change Information")) {
             if (Validate.getInstance().isEmailValid(this.view.jTextFieldEmail.getText())) {
-                if (this.view.jTextFieldPassword.getText() != null
-                        && !"".equals(this.view.jTextFieldPassword.getText().trim())) {
+                if (Validate.getInstance().isPasswordValid(password)) {
 
                     this.tempUser.setEmail(this.view.jTextFieldEmail.getText());
-                    this.tempUser.setPassword(BcryptHash.hashPassword(this.view.jTextFieldPassword.getText()));
+                    this.tempUser.setPassword(BcryptHash.hashPassword(password));
                     this.tempUser.setRole(this.view.jTextFieldRole.getText());
                     this.tempUser.setStatus(this.view.jTextFieldStatus.getText());
                     this.tempUser.setUsername(this.view.jTextFieldUsername.getText());
@@ -48,8 +47,7 @@ public class MyAccountController implements Action, MouseListener, KeyListener {
                     Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Changing Information Successfully!");
                     Application.showForm(new FormMyAccount());
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Password not empty, please try again!");
-
+                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Password must contain at least 1 special character, 1 number, 1 capital letter and must be 6 characters or more.");
                 }
 
             } else {

@@ -9,7 +9,6 @@ import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Action;
-import raven.application.Application;
 import raven.application.form.RegisterForm;
 import raven.toast.Notifications;
 
@@ -33,28 +32,36 @@ public class RegisterController implements Action {
         String username = this.view.txtUsername.getText().trim();
         String email = this.view.txtEmail.getText().trim();
         String password = new String(this.view.txtPassword.getPassword());
+        String role = this.view.roleComboBox.getSelectedItem().toString();
 
         if (src.equals("Register")) {
 
             if (username.isBlank() || email.isBlank() || password.isBlank()) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Vui lòng điền đầy đủ thông tin");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Please fill all information");
                 return;
             }
 
             if (!Validate.getInstance().isEmailValid(email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Email không hợp lệ");
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Email does not match");
                 return;
             }
-
-            if (this.view.checkAccountIsExist(username, email)) {
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản đã tồn tại");
-            } else {
-                UsersDAO.getInstance().registerUser(username, email, password);
-                Application.navigateToLoginScreen();
-                Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Đăng kí thành công");
+            
+            if (!Validate.getInstance().isPasswordValid(password)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Password must contain at least 1 special character, 1 number, 1 capital letter and must be 6 characters or more.");
+                return;
             }
-        }
+            
+            
+            if (this.view.checkAccountIsExist(username, email)) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Account is existed");
+                return;
+            }
+            
+            UsersDAO.getInstance().registerUser(username, email, password, role);
+            this.view.resetForm();
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_CENTER, "Register successful");
 
+        }
     }
 
     @Override

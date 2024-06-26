@@ -5,6 +5,7 @@
 package dao;
 
 import database.JDBCUtil;
+import helper.BCrypt.BcryptHash;
 import static helper.BCrypt.BcryptHash.checkPassword;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -195,22 +196,28 @@ public class UsersDAO implements DAOInterface<Users> {
         }
     }
 
-    public void registerUser(String username, String email, String password) {
+    public void registerUser(String username, String email, String password, String role) {
         Connection conn = null;
         PreparedStatement pst = null;
+        
+        String status = "Active";
+        
+        String hashpw = BcryptHash.hashPassword(password);
 
         try {
             // Bước 1: Kết nối tới cơ sở dữ liệu
             conn = JDBCUtil.getConnection();
 
             // Bước 2: Chuẩn bị câu lệnh SQL
-            String sql = "INSERT INTO Users(username, email, password) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Users(username, email, password, role, status) VALUES (?, ?, ?, ?, ?)";
             pst = conn.prepareStatement(sql);
 
             // Bước 3: Thiết lập các tham số
             pst.setString(1, username);
             pst.setString(2, email);
-            pst.setString(3, password);
+            pst.setString(3, hashpw);
+            pst.setString(4, role);
+            pst.setString(5, status);
 
             // Bước 4: Thực thi câu lệnh
             int rowsAffected = pst.executeUpdate();
