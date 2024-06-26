@@ -12,7 +12,6 @@ import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.table.DefaultTableModel;
 import model.Inventory;
-import raven.table.CustomTableCellRenderer;
 import raven.table.TableRenderer;
 import raven.toast.Notifications;
 
@@ -26,22 +25,22 @@ public class FormGoodIssue extends javax.swing.JPanel {
         initComponents();
         lb.putClientProperty(FlatClientProperties.STYLE, ""
                 + "font:$h1.font");
-        
+
         this.Load();
-        
+
         inventoryImage.setBorder(BorderFactory.createLineBorder(Color.lightGray, 2));
-        
+
         // Ẩn
         this.inventoryImageName.setVisible(false);
         this.inventoryQuantityAvailable.setVisible(false);
-        
+
         // Khóa ô
         this.inventoryId.setEnabled(false);
         this.inventoryBarcode.setEnabled(false);
         this.inventoryType.setEnabled(false);
         this.inventoryName.setEnabled(false);
         this.inventorySellingPrice.setEnabled(false);
-        
+
         // Gắn sự kiện
         Action action = new GoodIssueController(this);
         this.btnAddToCart.addActionListener(action);
@@ -50,18 +49,18 @@ public class FormGoodIssue extends javax.swing.JPanel {
         this.btnExportInvoce.addActionListener(action);
         this.btnFind.addActionListener(action);
         this.btnResetCart.addActionListener(action);
-        
+
         // Gắn sự kiện key
         KeyListener keyAcion = new GoodIssueController(this);
         this.jTextFieldFind.addKeyListener(keyAcion);
-        
-         // Xử lí click vào table inventory
+
+        // Xử lí click vào table inventory
         MouseListener mouseAction = new GoodIssueController(this);
         this.inventoryTable.addMouseListener(mouseAction);
-        
+
         // Xử lí click vào table cart
         this.inventoryCart.addMouseListener(mouseAction);
-        
+
         // Căn giữa chữ ở bản
         TableRenderer inventoryTableRenderer = new TableRenderer(inventoryTable);
         TableRenderer inventoryCartRenderer = new TableRenderer(inventoryCart);
@@ -428,8 +427,8 @@ public class FormGoodIssue extends javax.swing.JPanel {
     }//GEN-LAST:event_btnResetCartActionPerformed
 
     private void btnBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarcodeActionPerformed
-                Thread scannerThread = new Thread(new BarcodeScannerTask( this.jTextFieldFind));
-                scannerThread.start();
+        Thread scannerThread = new Thread(new BarcodeScannerTask(this.jTextFieldFind));
+        scannerThread.start();
     }//GEN-LAST:event_btnBarcodeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -473,23 +472,20 @@ public class FormGoodIssue extends javax.swing.JPanel {
             tableModel.setRowCount(0);
 
             //"ID", "Barcode", "Type", "Name", "Price", "Quantity", "Image"
-            
             for (Inventory inventory : listInventorys) {
-                if(inventory.getStatus().equals("Active")){
+                if (inventory.getStatus().equals("Active")) {
                     Object[] row = new Object[]{
-                    inventory.getInventoryID(),
-                    inventory.getBarcode(),
-                    inventory.getType(),
-                    inventory.getName(),
-                    inventory.getSellingPrice(),
-                    inventory.getQuantity(),
-                    inventory.getImage()
-                };
-                tableModel.addRow(row);
+                        inventory.getInventoryID(),
+                        inventory.getBarcode(),
+                        inventory.getType(),
+                        inventory.getName(),
+                        inventory.getSellingPrice(),
+                        inventory.getQuantity(),
+                        inventory.getImage()
+                    };
+                    tableModel.addRow(row);
                 }
             }
-            
-                    
 
             this.inventoryTable.setModel(tableModel);
             Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
@@ -500,5 +496,5 @@ public class FormGoodIssue extends javax.swing.JPanel {
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
         }
     }
-    
+
 }

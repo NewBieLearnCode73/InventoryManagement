@@ -8,8 +8,17 @@ package database;
 
 public class SessionRole {
     private static int id = 0;
+    private static String username = null;
     private static String role = null;
     private static String status = null;
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        SessionRole.username = username;
+    }
     
     public static void setId(int id) {
         SessionRole.id = id;

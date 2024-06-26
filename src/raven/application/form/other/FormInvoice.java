@@ -4,9 +4,12 @@ import com.formdev.flatlaf.FlatClientProperties;
 import controller.InvoiceController;
 import dao.TransactionDAO;
 import dao.TransactionDetailsDAO;
+import dao.UsersDAO;
+import database.SessionRole;
 import helper.print.InvoicePayment;
 import helper.print.InvoiceReportField;
 import helper.print.PaymentManager;
+import helper.util.Constant;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseListener;
@@ -16,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.InvoiceDetail;
 import model.Transaction;
+import model.Users;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.swing.JRViewer;
@@ -108,7 +112,7 @@ public class FormInvoice extends javax.swing.JPanel {
             new Object [][] {
             },
             new String [] {
-                "TransactionID", "TransactionDate", "TotalAmount"
+                "TransactionID", "UserID", "TransactionDate", "TotalAmount"
             }
         ));
         transactionTable.setRowHeight(40);
@@ -192,7 +196,7 @@ public class FormInvoice extends javax.swing.JPanel {
         } catch (JRException e) {
             e.printStackTrace();
         } catch (ArrayIndexOutOfBoundsException e) {
-            JOptionPane.showMessageDialog(this, "Please choose a specific invoice", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, Constant.CHOOSE_SPECIFIC_INVOICE, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportInvoiceActionPerformed
 
@@ -206,6 +210,7 @@ public class FormInvoice extends javax.swing.JPanel {
             for (Transaction t : listTransaction) {
                 Object[] row = new Object[]{
                     t.getTransactionID(),
+                    t.getUserID(),
                     t.getTransactionDate(),
                     t.getTotalAmount()
                 };
@@ -214,10 +219,10 @@ public class FormInvoice extends javax.swing.JPanel {
             }
             this.transactionTable.setModel(transactionTableModel);
 
-            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Loading Success From Database");
+            Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_DATABSE_SUCCESS);
         } catch (Exception e) {
             System.out.println(e.toString());
-            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, "Error Load From Database");
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.BOTTOM_RIGHT, Constant.LOAD_DATABASE_ERROR);
         }
     }
 
@@ -273,8 +278,9 @@ public class FormInvoice extends javax.swing.JPanel {
 
         int row = this.transactionTable.getSelectedRow();
         Integer transactionID = (Integer) transactionTable.getValueAt(row, 0);
-        LocalDateTime date = (LocalDateTime) transactionTable.getValueAt(row, 1);
-        Double totalPrice = (Double) transactionTable.getValueAt(row, 2);
+        Integer userID = (Integer) transactionTable.getValueAt(row, 1);
+        LocalDateTime date = (LocalDateTime) transactionTable.getValueAt(row, 2);
+        Double totalPrice = (Double) transactionTable.getValueAt(row, 3);
 
         ArrayList<InvoiceDetail> list = TransactionDetailsDAO.getInstance().getListTransactionDetail(transactionID);
 
@@ -288,8 +294,11 @@ public class FormInvoice extends javax.swing.JPanel {
 
             fields.add(tmp);
         }
+        
+        //Get username
+        Users user = UsersDAO.getInstance().getById(userID);
 
-        InvoicePayment dataPrint = new InvoicePayment("Con cac", date.toString(), fields, totalPrice.intValue());
+        InvoicePayment dataPrint = new InvoicePayment(user.getUsername(), date.toString(), fields, totalPrice.intValue());
 
         return dataPrint;
     }

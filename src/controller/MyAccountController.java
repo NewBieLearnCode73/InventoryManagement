@@ -6,6 +6,7 @@ package controller;
 
 import dao.UsersDAO;
 import helper.BCrypt.BcryptHash;
+import helper.util.Constant;
 import helper.util.Validate;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -31,29 +32,27 @@ public class MyAccountController implements Action, MouseListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String source = e.getActionCommand();
-
+        String password = new String(this.view.jPasswordField.getPassword());
         if (source.equals("Change Information")) {
             if (Validate.getInstance().isEmailValid(this.view.jTextFieldEmail.getText())) {
-                if (this.view.jTextFieldPassword.getText() != null
-                        && !"".equals(this.view.jTextFieldPassword.getText().trim())) {
+                if (Validate.getInstance().isPasswordValid(password)) {
 
                     this.tempUser.setEmail(this.view.jTextFieldEmail.getText());
-                    this.tempUser.setPassword(BcryptHash.hashPassword(this.view.jTextFieldPassword.getText()));
+                    this.tempUser.setPassword(BcryptHash.hashPassword(password));
                     this.tempUser.setRole(this.view.jTextFieldRole.getText());
                     this.tempUser.setStatus(this.view.jTextFieldStatus.getText());
                     this.tempUser.setUsername(this.view.jTextFieldUsername.getText());
                     this.tempUser.setUserID(Integer.parseInt(this.view.tempUserID.getText()));
 
                     UsersDAO.getInstance().update(tempUser);
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, "Changing Information Successfully!");
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.BOTTOM_RIGHT, Constant.SUCCESS_CHANGE_INFORMATION);
                     Application.showForm(new FormMyAccount());
                 } else {
-                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Password not empty, please try again!");
-
+                    Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, Constant.VALIDATE_PASSWORD_ERROR);
                 }
 
             } else {
-                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, "Email not valid please try again!");
+                Notifications.getInstance().show(Notifications.Type.WARNING, Notifications.Location.BOTTOM_RIGHT, Constant.VALIDATE_EMAIL_ERROR);
 
             }
         }

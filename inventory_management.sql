@@ -16,6 +16,7 @@ CREATE TABLE `Inventory` (
 
 CREATE TABLE `Transactions` (
   `TransactionID` int NOT NULL AUTO_INCREMENT,
+  `UserId` int NOT NULL,
   `TransactionDate` datetime NOT NULL,
   `TotalAmount` double DEFAULT NULL,
   PRIMARY KEY (`TransactionID`)
@@ -67,8 +68,8 @@ BEGIN
 
     -- Kiểm tra xem TransactionID có được cung cấp không, nếu không, sử dụng biến phiên hoặc tạo một giao dịch mới
     IF @current_transaction_id IS NULL THEN
-        INSERT INTO Transactions (TransactionDate, TotalAmount)
-        VALUES (NOW(), 0);
+        INSERT INTO Transactions (UserID, TransactionDate, TotalAmount)
+        VALUES (@current_user_id, NOW(), 0);
 
         -- Lấy TransactionID vừa được chèn và gán nó vào biến phiên
         SET @current_transaction_id = LAST_INSERT_ID();

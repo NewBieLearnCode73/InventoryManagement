@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package controller;
 
 import java.awt.event.ActionEvent;
@@ -17,19 +16,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import raven.application.form.other.FormAdminControl;
 
-
-public class AdminControlController implements Action, MouseListener, KeyListener{
+public class AdminControlController implements Action, MouseListener, KeyListener {
 
     public FormAdminControl view;
 
     public AdminControlController(FormAdminControl view) {
         this.view = view;
     }
-    
-     
+
     @Override
     public Object getValue(String key) {
-                return null;
+        return null;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class AdminControlController implements Action, MouseListener, KeyListene
 
     @Override
     public boolean accept(Object sender) {
-                return false;
+        return false;
     }
 
     @Override
@@ -65,10 +62,10 @@ public class AdminControlController implements Action, MouseListener, KeyListene
     // Xử lí click chuột
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getSource() == this.view.jTableUsers){
+        if (e.getSource() == this.view.jTableUsers) {
             int row = this.view.jTableUsers.getSelectedRow();
             DefaultTableModel model = (DefaultTableModel) this.view.jTableUsers.getModel();
-            
+
             this.view.IDtempt.setText(model.getValueAt(row, 0).toString());
         }
     }
@@ -99,7 +96,7 @@ public class AdminControlController implements Action, MouseListener, KeyListene
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getSource() == this.view.jTextFieldFind){
+        if (e.getSource() == this.view.jTextFieldFind) {
             System.out.println("sssss");
             DefaultTableModel obj = (DefaultTableModel) this.view.jTableUsers.getModel();
             TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
@@ -109,4 +106,3 @@ public class AdminControlController implements Action, MouseListener, KeyListene
     }
 
 }
-

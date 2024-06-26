@@ -5,6 +5,7 @@
 package dao;
 
 import database.JDBCUtil;
+import database.SessionRole;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -225,6 +226,12 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             stmt = con.prepareStatement(firstSql);
             stmt.executeUpdate();
 
+            // Thiết lập giá trị cho biến phiên @user_id
+            String setUserSql = "SET @current_user_id = ?";
+            stmt = con.prepareStatement(setUserSql);
+            stmt.setInt(1, SessionRole.getId());
+            stmt.executeUpdate();
+
             String insertSql = "INSERT INTO TransactionDetails (InventoryID, Quantity) VALUES (?, ?)";
             stmt = con.prepareStatement(insertSql);
 
@@ -311,9 +318,9 @@ public class InventoryDAO implements DAOInterface<Inventory> {
 
         return totalProfit;
     }
-    
+
     // Tính tổng giá tiền đã mua vào các sản phẩm trong kho
-    public Double getPurchasing(){
+    public Double getPurchasing() {
         Double totalPurchasing = 0.0;
         try {
             // Bước 1: Tạo kết nối
@@ -345,48 +352,48 @@ public class InventoryDAO implements DAOInterface<Inventory> {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
     // Trả ra 1 mảng chứa các phần tử với id bên trong mảng truyền vào
     public ArrayList<Inventory> getInventoriesByIds(int[] ids) {
-    ArrayList<Inventory> list = new ArrayList<>();
-    if (ids == null || ids.length == 0) {
+        ArrayList<Inventory> list = new ArrayList<>();
+        if (ids == null || ids.length == 0) {
+            return list;
+        }
+
+        String placeholders = String.join(",", java.util.Collections.nCopies(ids.length, "?")); // ?,?,?,...
+        String sql = "SELECT * FROM Inventory WHERE InventoryID IN (" + placeholders + ")";
+
+        try {
+            Connection con = JDBCUtil.getConnection();
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            for (int i = 0; i < ids.length; i++) {
+                pst.setInt(i + 1, ids[i]);
+            }
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Inventory inventory = new Inventory();
+                inventory.setInventoryID(rs.getInt("InventoryID"));
+                inventory.setType(rs.getString("Type"));
+                inventory.setName(rs.getString("Name"));
+                inventory.setQuantity(rs.getInt("Quantity"));
+                inventory.setImage(rs.getString("Image"));
+                inventory.setDescription(rs.getString("Description"));
+                inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
+                inventory.setSellingPrice(rs.getDouble("SellingPrice"));
+                inventory.setBarcode(rs.getInt("Barcode"));
+                inventory.setStatus(rs.getString("Status"));
+                list.add(inventory);
+            }
+
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         return list;
     }
-
-    String placeholders = String.join(",", java.util.Collections.nCopies(ids.length, "?")); // ?,?,?,...
-    String sql = "SELECT * FROM Inventory WHERE InventoryID IN (" + placeholders + ")";
-
-    try {
-        Connection con = JDBCUtil.getConnection();
-        PreparedStatement pst = con.prepareStatement(sql);
-
-        for (int i = 0; i < ids.length; i++) {
-            pst.setInt(i + 1, ids[i]);
-        }
-
-        ResultSet rs = pst.executeQuery();
-
-        while (rs.next()) {
-            Inventory inventory = new Inventory();
-            inventory.setInventoryID(rs.getInt("InventoryID"));
-            inventory.setType(rs.getString("Type"));
-            inventory.setName(rs.getString("Name"));
-            inventory.setQuantity(rs.getInt("Quantity"));
-            inventory.setImage(rs.getString("Image"));
-            inventory.setDescription(rs.getString("Description"));
-            inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
-            inventory.setSellingPrice(rs.getDouble("SellingPrice"));
-            inventory.setBarcode(rs.getInt("Barcode"));
-            inventory.setStatus(rs.getString("Status"));
-            list.add(inventory);
-        }
-
-        JDBCUtil.closeConnection(con);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
-
-    return list;
-}
 
 }

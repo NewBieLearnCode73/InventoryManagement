@@ -104,12 +104,17 @@ public class MainForm extends JLayeredPane {
                     JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
                             JOptionPane.ERROR_MESSAGE);
                 }
-            } 
-            else if (index == 6) {
+            } else if (index == 6) {
+                if ("ADMIN".equals(SessionRole.getRole())) {
+                    Application.showForm(new RegisterForm());
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (index == 7) {
                 SessionRole.resetSession(); // Xóa bỏ session
                 Application.navigateToLoginScreen();
-            } 
-            else {
+            } else {
                 action.cancel();
             }
         });
