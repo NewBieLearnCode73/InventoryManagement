@@ -25,5 +25,9 @@ public class Validate {
         Matcher matcher = emailPattern.matcher(email);
         return matcher.matches();
     }
+    
+    public boolean isPasswordValid(String password){
+        return false;
+    }
 
 }
