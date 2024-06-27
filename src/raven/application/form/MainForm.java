@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import raven.application.Application;
+import raven.application.form.other.CartForm;
 import raven.application.form.other.FormAdminControl;
 import raven.application.form.other.FormDashboard;
 import raven.application.form.other.FormGoodReceipt;
