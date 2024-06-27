@@ -14,8 +14,6 @@ import javax.swing.table.DefaultTableModel;
 
 import model.Inventory;
 import model.InventoryType;
-import raven.table.CustomHeaderRenderer;
-import raven.table.CustomTableCellRenderer;
 import raven.table.TableRenderer;
 import raven.toast.Notifications;
 /**
@@ -122,7 +120,7 @@ public class FormGoodReceipt extends javax.swing.JPanel {
 
         lb.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lb.setText("Good Receipt");
+        lb.setText("Inventory Management");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Function", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 13))); // NOI18N
 

@@ -101,7 +101,7 @@ public class GoodReciptController implements Action, MouseListener, KeyListener 
                 String Description = this.view.inventoryDescription.getText();
                 Double PurchasingPrice = Double.valueOf(this.view.inventoryPurchasingPrice.getText());
                 Double SellingPrice = Double.valueOf(this.view.inventorySellingPrice.getText());
-                int Barcode = Integer.parseInt(this.view.inventoryBarcode.getText());
+                String Barcode = this.view.inventoryBarcode.getText();
                 String Status = this.view.inventoryComboBoxStatus.getSelectedItem().toString();
 
                 Inventory temptInventory = new Inventory();
@@ -164,7 +164,7 @@ public class GoodReciptController implements Action, MouseListener, KeyListener 
                 inventory.setPurchasingPrice(Double.parseDouble(this.view.inventoryPurchasingPrice.getText()));
                 inventory.setSellingPrice(Double.parseDouble(this.view.inventorySellingPrice.getText()));
                 inventory.setDescription(this.view.inventoryDescription.getText());
-                inventory.setBarcode(Integer.valueOf(this.view.inventoryBarcode.getText()));
+                inventory.setBarcode(this.view.inventoryBarcode.getText());
                 inventory.setStatus(this.view.inventoryComboBoxStatus.getSelectedItem().toString());
 
                 if (rootImagePath != null && !"".equals(rootImagePath)) {

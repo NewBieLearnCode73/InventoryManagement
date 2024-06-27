@@ -5,21 +5,21 @@ import helper.globalVariables.CartInventory;
 import static helper.processImage.processImage.getImage;
 import helper.util.Constant;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.Inventory;
 import raven.application.form.other.FormGoodIssue;
 import raven.toast.Notifications;
 
-public class GoodIssueController implements Action, MouseListener, KeyListener {
+public class GoodIssueController implements Action, MouseListener, DocumentListener {
 
     public FormGoodIssue view;
     // Lưu số lượng đơn hàng
@@ -69,7 +69,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
                     && !"".equals(this.view.inventoryBarcode.getText())
                     && !"".equals(this.view.inventoryType.getText())
                     && !"".equals(this.view.inventoryName.getText())
-                    && !"".equals(this.view.inventorySellingPrice.getText())) {
+                    && !"".equals(this.view.inventoryQuantityAvailable.getText())) {
 
                 // Kiểm tra giá trị của JSpinner inventoryQuantity
                 int quantity = (int) this.view.inventoryQuantity.getValue();
@@ -83,10 +83,10 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
                         // Tạo một đối tượng Inventory mới
                         Inventory tempInventory = new Inventory();
                         tempInventory.setInventoryID(Integer.parseInt(this.view.inventoryId.getText()));
-                        tempInventory.setBarcode(Integer.valueOf(this.view.inventoryBarcode.getText()));
+                        tempInventory.setBarcode(this.view.inventoryBarcode.getText());
                         tempInventory.setType(this.view.inventoryType.getText());
                         tempInventory.setName(this.view.inventoryName.getText());
-                        tempInventory.setSellingPrice(Double.parseDouble(this.view.inventorySellingPrice.getText()));
+                        tempInventory.setSellingPrice(Double.parseDouble(this.view.inventoryQuantityAvailable.getText()));
                         tempInventory.setQuantity(quantity);
 
                         if (this.view.inventoryImageName.getText() == null || "".equals(this.view.inventoryImageName.getText())) {
@@ -183,6 +183,8 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             }
         }
     }
+    
+    }
 
     @Override
     public Object getValue(String key) {
@@ -234,7 +236,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
             this.view.inventoryBarcode.setText(barcodeValue != null ? barcodeValue.toString() : "");
             this.view.inventoryType.setText(typeValue != null ? typeValue.toString() : "");
             this.view.inventoryName.setText(nameValue != null ? nameValue.toString() : "");
-            this.view.inventorySellingPrice.setText(sellingPriceValue != null ? sellingPriceValue.toString() : "");
+            this.view.inventoryQuantityAvailable.setText(sellingPriceValue != null ? sellingPriceValue.toString() : "");
             this.view.inventoryQuantityAvailable.setText(quantityAvailableValue != null ? quantityAvailableValue.toString() : "");
 
             if (imageNameValue == null || "".equals(imageNameValue.toString())) {
@@ -290,22 +292,26 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
+    
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filterTable();
+            }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filterTable();
+            }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-    }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                filterTable();
+            }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource() == this.view.jTextFieldFind) {
-            DefaultTableModel obj = (DefaultTableModel) this.view.inventoryTable.getModel();
-            TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
-            this.view.inventoryTable.setRowSorter(obj1);
-            obj1.setRowFilter(RowFilter.regexFilter(this.view.jTextFieldFind.getText()));
-        }
-    }
+            private void filterTable() {
+                DefaultTableModel obj = (DefaultTableModel) view.inventoryTable.getModel();
+                TableRowSorter<DefaultTableModel> obj1 = new TableRowSorter<>(obj);
+                view.inventoryTable.setRowSorter(obj1);
+                obj1.setRowFilter(RowFilter.regexFilter(view.jTextFieldFind.getText()));
+            }
 }
