@@ -9,7 +9,7 @@ CREATE TABLE `Inventory` (
   `Description` text,
   `PurchasingPrice` double DEFAULT NULL,
   `SellingPrice` double DEFAULT NULL,
-  `Barcode` int DEFAULT NULL,
+  `Barcode` double DEFAULT NULL,
   `Status` enum('Active','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'Active',
   PRIMARY KEY (`InventoryID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
