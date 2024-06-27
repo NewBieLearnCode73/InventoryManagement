@@ -182,9 +182,9 @@ public class GoodIssueController implements Action, MouseListener, DocumentListe
                 JOptionPane.showMessageDialog(this.view, "Please select at least one product", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         }
-    }
-    
-    }
+
+    }}
+
 
     @Override
     public Object getValue(String key) {
@@ -236,7 +236,7 @@ public class GoodIssueController implements Action, MouseListener, DocumentListe
             this.view.inventoryBarcode.setText(barcodeValue != null ? barcodeValue.toString() : "");
             this.view.inventoryType.setText(typeValue != null ? typeValue.toString() : "");
             this.view.inventoryName.setText(nameValue != null ? nameValue.toString() : "");
-            this.view.inventoryQuantityAvailable.setText(sellingPriceValue != null ? sellingPriceValue.toString() : "");
+            this.view.inventorySellingPrice.setText(sellingPriceValue != null ? sellingPriceValue.toString() : "");
             this.view.inventoryQuantityAvailable.setText(quantityAvailableValue != null ? quantityAvailableValue.toString() : "");
 
             if (imageNameValue == null || "".equals(imageNameValue.toString())) {

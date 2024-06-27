@@ -39,6 +39,7 @@ public class CartForm extends javax.swing.JPanel {
         Action action = new CartController(this);
         this.btnBarcode.addActionListener(action);
         this.exportInvoiceBtn.addActionListener(action);
+        this.btnResetCart.addActionListener(action);
         
         TableColumnModel tcm = inventoryCart.getColumnModel();
         TableColumn tc = tcm.getColumn(4);
@@ -59,7 +60,7 @@ public class CartForm extends javax.swing.JPanel {
         inventoryCart = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         exportInvoiceBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnResetCart = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -83,7 +84,7 @@ public class CartForm extends javax.swing.JPanel {
 
         exportInvoiceBtn.setText("Export invoice");
 
-        jButton2.setText("Delete Cart");
+        btnResetCart.setText("Reset Cart");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Total cost");
@@ -118,7 +119,7 @@ public class CartForm extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(exportInvoiceBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnResetCart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(13, 13, 13)
@@ -146,7 +147,7 @@ public class CartForm extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(exportInvoiceBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnResetCart, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 180, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -231,11 +232,11 @@ public class CartForm extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextField barcodeField;
     public javax.swing.JButton btnBarcode;
+    private javax.swing.JButton btnResetCart;
     private javax.swing.JButton exportInvoiceBtn;
     public javax.swing.JLabel finalCostJLabel;
     private javax.swing.JLabel header;
     public javax.swing.JTable inventoryCart;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;

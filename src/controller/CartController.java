@@ -125,6 +125,11 @@ public class CartController implements Action {
                 JOptionPane.showMessageDialog(this.view, "Please select at least one product", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         }
+        
+        if(src.equals("Reset Cart")){
+            CartInventory.listInventorys = null;
+            LoadCart();
+        }
     }
     
      public void LoadCart() {
