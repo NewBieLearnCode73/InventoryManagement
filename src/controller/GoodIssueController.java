@@ -182,7 +182,7 @@ public class GoodIssueController implements Action, MouseListener, KeyListener {
                 JOptionPane.showMessageDialog(this.view, "Please select at least one product", "Warning", JOptionPane.WARNING_MESSAGE);
             }
         }
-    }
+    }}
 
     @Override
     public Object getValue(String key) {
