@@ -94,25 +94,27 @@ public class MainForm extends JLayeredPane {
                 Application.showForm(new FormGoodReceipt());
             } else if (index == 2) {
                 Application.showForm(new FormGoodIssue());
-            } else if (index == 3) {
-                Application.showForm(new FormInvoice());
+           } else if (index == 3) {
+                Application.showForm(new CartForm());
             } else if (index == 4) {
-                Application.showForm(new FormMyAccount());
+                Application.showForm(new FormInvoice());
             } else if (index == 5) {
+                Application.showForm(new FormMyAccount());
+            } else if (index == 6) {
                 if ("ADMIN".equals(SessionRole.getRole())) {
                     Application.showForm(new FormAdminControl());
                 } else {
                     JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
                             JOptionPane.ERROR_MESSAGE);
                 }
-            } else if (index == 6) {
+            } else if (index == 7) {
                 if ("ADMIN".equals(SessionRole.getRole())) {
                     Application.showForm(new RegisterForm());
                 } else {
                     JOptionPane.showMessageDialog(new JFrame(), "This menu item only using for Admin", "Dialog",
                             JOptionPane.ERROR_MESSAGE);
                 }
-            } else if (index == 7) {
+            } else if (index == 8) {
                 SessionRole.resetSession(); // Xóa bỏ session
                 Application.navigateToLoginScreen();
             } else {

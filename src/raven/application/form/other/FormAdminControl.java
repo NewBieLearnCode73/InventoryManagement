@@ -20,6 +20,7 @@ import raven.toast.Notifications;
 import helper.BCrypt.BcryptHash;
 import helper.util.Constant;
 import helper.util.Validate;
+import raven.table.TableRenderer;
 
 /**
  *
@@ -38,6 +39,8 @@ public class FormAdminControl extends javax.swing.JPanel {
         MouseListener actionMouse = new AdminControlController(this);
 
         jTableUsers.addMouseListener(actionMouse);
+        TableRenderer jTableUsersRenderer = new TableRenderer(jTableUsers);
+        jTableUsersRenderer.setAll();
 
         // Gắn sự kiện tìm kiếm
         KeyListener actionKey = new AdminControlController(this);
