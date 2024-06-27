@@ -15,12 +15,12 @@ public class Inventory {
     private String description;
     private double purchasingPrice;
     private double sellingPrice;
-    private Integer barcode;
+    private String barcode;
     private String status;
 
     public Inventory() {}
 
-    public Inventory(int inventoryID, String type, String name, int quantity, String image, String description, double purchasingPrice, double sellingPrice, Integer barcode, String status) {
+    public Inventory(int inventoryID, String type, String name, int quantity, String image, String description, double purchasingPrice, double sellingPrice, String barcode, String status) {
         this.type = type;
         this.name = name;
         this.quantity = quantity;
@@ -64,7 +64,7 @@ public class Inventory {
         return sellingPrice;
     }
 
-    public Integer getBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
@@ -104,7 +104,7 @@ public class Inventory {
         this.sellingPrice = sellingPrice;
     }
 
-    public void setBarcode(Integer barcode) {
+    public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
 

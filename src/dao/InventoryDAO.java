@@ -41,7 +41,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             pst.setString(5, t.getDescription());
             pst.setDouble(6, t.getPurchasingPrice());
             pst.setDouble(7, t.getSellingPrice());
-            pst.setInt(8, t.getBarcode());
+            pst.setString(8, t.getBarcode());
             pst.setString(9, t.getStatus());
 
             // Bước 4: Thực thi câu lệnh SQL
@@ -76,7 +76,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
             pst.setString(5, t.getDescription());
             pst.setDouble(6, t.getPurchasingPrice());
             pst.setDouble(7, t.getSellingPrice());
-            pst.setInt(8, t.getBarcode());
+            pst.setString(8, t.getBarcode());
             pst.setString(9, t.getStatus());
             pst.setInt(10, t.getInventoryID()); // Giả sử có trường id trong Inventory để xác định bản ghi cần cập nhật
 
@@ -164,7 +164,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
                 inventory.setDescription(rs.getString("Description"));
                 inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
                 inventory.setSellingPrice(rs.getDouble("SellingPrice"));
-                inventory.setBarcode(rs.getInt("Barcode"));
+                inventory.setBarcode(rs.getString("Barcode"));
                 inventory.setStatus(rs.getString("Status"));
             }
 
@@ -201,7 +201,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
                 inventory.setDescription(rs.getString("Description"));
                 inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
                 inventory.setSellingPrice(rs.getDouble("SellingPrice"));
-                inventory.setBarcode(rs.getInt("Barcode"));
+                inventory.setBarcode(rs.getString("Barcode"));
                 inventory.setStatus(rs.getString("Status"));
                 list.add(inventory);
             }
@@ -383,7 +383,7 @@ public class InventoryDAO implements DAOInterface<Inventory> {
                 inventory.setDescription(rs.getString("Description"));
                 inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
                 inventory.setSellingPrice(rs.getDouble("SellingPrice"));
-                inventory.setBarcode(rs.getInt("Barcode"));
+                inventory.setBarcode(rs.getString("Barcode"));
                 inventory.setStatus(rs.getString("Status"));
                 list.add(inventory);
             }
@@ -394,6 +394,45 @@ public class InventoryDAO implements DAOInterface<Inventory> {
         }
 
         return list;
+    }
+    
+    public Inventory getByBarcode(String barcode) {
+        try {
+            // Bước 1: Tạo kết nối
+            Connection con = JDBCUtil.getConnection();
+
+            // Bước 2: Thực thi câu lệnh SQL
+            String sql = "SELECT * FROM Inventory WHERE Barcode=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            // Truyền dữ liệu
+            pst.setString(1, barcode);
+
+            // Bước 3: Thực thi câu lệnh SQL và lấy kết quả
+            ResultSet rs = pst.executeQuery();
+
+            // Bước 4: Xử lý kết quả
+            Inventory inventory = null;
+            if (rs.next()) {
+                inventory = new Inventory();
+                inventory.setInventoryID((rs.getInt("InventoryID")));
+                inventory.setType(rs.getString("Type"));
+                inventory.setName(rs.getString("Name"));
+                inventory.setQuantity(rs.getInt("Quantity"));
+                inventory.setImage(rs.getString("Image"));
+                inventory.setDescription(rs.getString("Description"));
+                inventory.setPurchasingPrice(rs.getDouble("PurchasingPrice"));
+                inventory.setSellingPrice(rs.getDouble("SellingPrice"));
+                inventory.setBarcode(rs.getString("Barcode"));
+                inventory.setStatus(rs.getString("Status"));
+            }
+
+            // Bước 5: Ngắt kết nối và trả về kết quả
+            JDBCUtil.closeConnection(con);
+            return inventory;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -32,7 +32,7 @@ public class InventoryType {
     }
     
     public static String[] getAllType(){
-        String[] arr_type = {"Ghế", "Bàn", "Tủ", "Giường", "Nệm", "Gương", "Giá đỡ"}; 
+        String[] arr_type = {"Sách", "Bút", "Vở"}; 
         return arr_type;
     }
 }
